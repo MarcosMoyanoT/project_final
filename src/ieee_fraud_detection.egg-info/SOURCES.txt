@@ -1,0 +1,7 @@
+README.md
+setup.py
+src/ieee_fraud_detection.egg-info/PKG-INFO
+src/ieee_fraud_detection.egg-info/SOURCES.txt
+src/ieee_fraud_detection.egg-info/dependency_links.txt
+src/ieee_fraud_detection.egg-info/top_level.txt
+tests/test_train_model.py
