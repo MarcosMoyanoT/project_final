@@ -125,8 +125,8 @@ st.dataframe(df_scores.head(20))
 st.markdown("### Costos estimados por tipo de servicio")
 st.table(df_scores.groupby("service_assignment")["estimated_cost"].sum().reset_index())
 
-# ---------- AGENTE CFO INTELIGENTE ----------
-st.markdown("## 🤖 Consultá al CFO Asistente (IA)")
+# ---------- AGENTE INTELIGENTE ----------
+st.markdown("## 🤖 Consultá al Asistente IA")
 
 from pandasai import SmartDataframe
 from pandasai.llm.openai import OpenAI
@@ -141,14 +141,14 @@ user_query = st.text_input("Hacé tu pregunta financiera sobre los datos (ej: ¿
 if user_query:
     try:
         response = smart_df.chat(user_query)
-        st.success("Respuesta del CFO (PandasAI):")
+        st.success("Respuesta del asistente:")
         st.write(response)
     except Exception as e:
         st.warning("Falla PandasAI, usando GPT directamente:")
         gpt_response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Eres un CFO asistente experto en análisis financiero."},
+                {"role": "system", "content": "Eres un consultor  CRO asistente experto en análisis financiero."},
                 {"role": "user", "content": user_query}
             ]
         )
