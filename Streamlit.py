@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 import streamlit as st
 import pandas as pd
-import openai
 import os
+from pandasai import SmartDataframe
+from pandasai.llm.openai import OpenAI
 
 # ---------- CONFIGURACIÓN ----------
 st.set_page_config(page_title="Simulador de Fraude + CFO IA", layout="wide")
 
 # ---------- CARGA DE DATOS ----------
 df_scores = pd.read_csv("df_scores.csv")
-df_scores_baseline = pd.read_csv("df_scores_baseline.csv")
-df_creditcard = pd.read_csv("df_creditcard.csv")
-df_loan = pd.read_csv("df_loan.csv")
-df_transaction = pd.read_csv("df_transaction.csv")
+#df_scores_baseline = pd.read_csv("df_scores_baseline.csv")
+df_creditcard = pd.read_csv("creditcard.csv")
+df_loan = pd.read_csv("loan_applications.csv")
+df_transaction = pd.read_csv("transactions.csv")
 
 df_creditcard.rename(columns={"Class": "fraud_flag"}, inplace=True)
 
@@ -88,10 +89,10 @@ df_scores['costo_asignado'] = df_scores['service_assignment'].map(costo_unitario
 df_scores['costo_est_modelo'] = df_scores['fraud_score'] * df_scores['costo_asignado']
 Costo_total_fraude_con_modelo = df_scores['costo_est_modelo'].sum()
 
-df_scores_baseline['fraud_score'] = 0.08
-df_scores_baseline['costo_asignado'] = df_scores_baseline['service_assignment'].map(costo_unitario)
-df_scores_baseline['costo_est_modelo'] = df_scores_baseline['fraud_score'] * df_scores_baseline['costo_asignado']
-Costo_total_fraude_sin_modelo = df_scores_baseline['costo_est_modelo'].sum()
+df_scores['fraud_score'] = 0.08
+df_scores['costo_asignado'] = df_scores['service_assignment'].map(costo_unitario)
+df_scores['costo_est_modelo'] = df_scores['fraud_score'] * df_scores['costo_asignado']
+Costo_total_fraude_sin_modelo = df_scores['costo_est_modelo'].sum()
 
 ahorro_total = Costo_total_fraude_sin_modelo - Costo_total_fraude_con_modelo
 porcentaje_ahorro = ahorro_total / Costo_total_fraude_sin_modelo if Costo_total_fraude_sin_modelo > 0 else 0
@@ -125,31 +126,74 @@ st.dataframe(df_scores.head(20))
 st.markdown("### Costos estimados por tipo de servicio")
 st.table(df_scores.groupby("service_assignment")["estimated_cost"].sum().reset_index())
 
-# ---------- AGENTE CFO INTELIGENTE ----------
-st.markdown("## 🤖 Consultá al CFO Asistente (IA)")
+# ---------- Asistente IA ----------
+st.markdown("## 🤖  Agente IA:")
 
 from pandasai import SmartDataframe
-from pandasai.llm.openai import OpenAI
+from openai import OpenAI
 
 # Configuración API
-openai.api_key = os.environ.get("OPENAI_API_KEY")
-llm_pandasai = OpenAI(api_token=openai.api_key)
-smart_df = SmartDataframe(df_scores, config={"llm": llm_pandasai, "verbose": True})
+import streamlit as st
 
-user_query = st.text_input("Hacé tu pregunta financiera sobre los datos (ej: ¿cuánto cuesta el fraude en Préstamos?)")
+import os
 
-if user_query:
-    try:
-        response = smart_df.chat(user_query)
-        st.success("Respuesta del CFO (PandasAI):")
-        st.write(response)
-    except Exception as e:
-        st.warning("Falla PandasAI, usando GPT directamente:")
-        gpt_response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "Eres un CFO asistente experto en análisis financiero."},
-                {"role": "user", "content": user_query}
-            ]
-        )
-        st.write(gpt_response.choices[0].message.content)
+# Configuración API
+from openai import OpenAI
+import os
+from dotenv import load_dotenv
+
+# Cargar variables de entorno (si usas .env para guardar tu clave API)
+import os
+import pandas as pd
+import streamlit as st
+from dotenv import load_dotenv
+from pandasai import SmartDataframe
+from pandasai.llm.openai import OpenAI as PandasAI_OpenAI
+from openai import OpenAI as OpenAIClient
+
+# Cargar variables de entorno
+load_dotenv()
+df = pd.read_csv("df_scores.csv")
+
+# Instanciar LLM y SmartDataframe
+llm = PandasAI_OpenAI(api_token=os.getenv("OPENAI_API_KEY"))
+sdf = SmartDataframe(df, config={"llm": llm})
+
+# Título inicial
+st.markdown("---")
+st.subheader("💬 Bienvenido!")
+
+# Inicializar historial de mensajes si no existe
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Mostrar mensajes anteriores
+for msg in st.session_state.messages:
+    st.chat_message(msg["role"]).write(msg["content"])
+
+# Esperar nueva entrada del usuario
+user_input = st.chat_input("Haz una pregunta")
+
+# Si hay input, procesarlo
+if user_input:
+    st.chat_message("user").write(user_input)
+    st.session_state.messages.append({"role": "user", "content": user_input})
+
+    with st.spinner("Pensando..."):
+        try:
+            # Intentar responder usando el DataFrame
+            reply = sdf.chat(user_input)
+        except Exception:
+            try:
+                # Si falla, usar LLM como backup (respuesta contextual)
+                openai_client = OpenAIClient(api_key=os.getenv("OPENAI_API_KEY"))
+                completion = openai_client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=[{"role": "user", "content": user_input}]
+                )
+                reply = completion.choices[0].message.content
+            except Exception as e:
+                reply = f"❌ Error al generar respuesta: {e}"
+
+    st.chat_message("assistant").write(reply)
+    st.session_state.messages.append({"role": "assistant", "content": reply})

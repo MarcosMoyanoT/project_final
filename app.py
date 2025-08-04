@@ -15,7 +15,7 @@ df = pd.read_csv("df_scores.csv")
 st.title("Análisis de Riesgo de Fraude")
 
 # Sidebar con opciones
-menu = st.sidebar.selectbox("Selecciona una vista:", ["Dashboard", "Asistente CFO (chatbot)"])
+menu = st.sidebar.selectbox("Selecciona una vista:", ["Dashboard", "Asistente AI"])
 
 # --- DASHBOARD PRINCIPAL ---
 if menu == "Dashboard":
@@ -36,8 +36,8 @@ if menu == "Dashboard":
     st.metric("Total TransactionAmt", f"${filtered_df['TransactionAmt'].sum():,.2f}")
 
 # --- CHATBOT CFO ---
-elif menu == "Asistente CFO (chatbot)":
-    st.subheader("💬 Chat con el CFO Asistente (PandasAI)")
+elif menu == "Asistente AI":
+    st.subheader("💬 Haz tu pregunta al asistente AI:")
 
     # Inicializar PandasAI
     llm = PandasAI_OpenAI(api_token=os.getenv("OPENAI_API_KEY"))

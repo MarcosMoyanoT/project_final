@@ -1381,3 +1381,2099 @@ result = {'type': 'number', 'value': count_users_above_0_2}
 2025-08-04 11:43:44 [INFO] Executing Step 7: ResultValidation
 2025-08-04 11:43:44 [INFO] Answer: {'type': 'number', 'value': 1288}
 2025-08-04 11:43:44 [INFO] Executing Step 8: ResultParsing
+2025-08-04 11:46:43 [INFO] Question: cuantos usuarios tienen score de riesgo mayor a 0.1?
+2025-08-04 11:46:43 [INFO] Running PandasAI with openai LLM...
+2025-08-04 11:46:43 [INFO] Prompt ID: ff49b8c2-31cf-4c78-9a23-19bd5c19e99a
+2025-08-04 11:46:43 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 11:46:43 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 11:46:43 [INFO] Executing Step 1: CacheLookup
+2025-08-04 11:46:43 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 11:46:43 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+16809_399.0_150.0_150.0_american express_credit_337.0_nan_gmail.com_gmail.com_235728.0_5.0_-41.0_Found_Windows 7_ie 11.0 for desktop_Trident/7.0,6079264455,Bajo riesgo,30.433,Paquete de Servicios medio
+6544_341.0_185.0_226.0_visa_credit_nan_nan_gmail.com_gmail.com_67248.0_5.0_0.0_Found_nan_chrome 63.0_Windows,7960415833,Fraude,32.325,Paquete de Servicios simple
+13413_103.0_185.0_137.0_visa_credit_nan_nan_yahoo.com_yahoo.com_64065.0_0.0_0.0_Found_nan_chrome generic_Windows,9341446921,Riesgo alto,56.439,Sin Paquete de Servicios
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos usuarios tienen score de riesgo mayor a 0.1?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 11:46:43 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 11:46:48 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 11:46:48 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+16809_399.0_150.0_150.0_american express_credit_337.0_nan_gmail.com_gmail.com_235728.0_5.0_-41.0_Found_Windows 7_ie 11.0 for desktop_Trident/7.0,6079264455,Bajo riesgo,30.433,Paquete de Servicios medio
+6544_341.0_185.0_226.0_visa_credit_nan_nan_gmail.com_gmail.com_67248.0_5.0_0.0_Found_nan_chrome 63.0_Windows,7960415833,Fraude,32.325,Paquete de Servicios simple
+13413_103.0_185.0_137.0_visa_credit_nan_nan_yahoo.com_yahoo.com_64065.0_0.0_0.0_Found_nan_chrome generic_Windows,9341446921,Riesgo alto,56.439,Sin Paquete de Servicios
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos usuarios tienen score de riesgo mayor a 0.1?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 11:46:48 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+
+# Assuming dfs is already declared and contains the DataFrames
+# Concatenate all DataFrames in the list dfs into a single DataFrame
+df = pd.concat(dfs, ignore_index=True)
+
+# Count the number of users with a fraud score greater than 0.1
+count_high_risk_users = df[df['fraud_score'] > 0.1].shape[0]
+
+# Declare result var: 
+result = {
+    "type": "number",
+    "value": count_high_risk_users
+}
+            ```
+            
+2025-08-04 11:46:48 [INFO] Executing Step 4: CachePopulation
+2025-08-04 11:46:48 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 11:46:48 [INFO] 
+Code running:
+```
+df = pd.concat(dfs, ignore_index=True)
+count_high_risk_users = df[df['fraud_score'] > 0.1].shape[0]
+result = {'type': 'number', 'value': count_high_risk_users}
+        ```
+2025-08-04 11:46:48 [INFO] Executing Step 6: CodeExecution
+2025-08-04 11:46:48 [INFO] Executing Step 7: ResultValidation
+2025-08-04 11:46:48 [INFO] Answer: {'type': 'number', 'value': 1522}
+2025-08-04 11:46:48 [INFO] Executing Step 8: ResultParsing
+2025-08-04 14:39:29 [INFO] Question: cuantos usuarios tienen mas de 0.1 de score?
+2025-08-04 14:39:29 [INFO] Running PandasAI with openai LLM...
+2025-08-04 14:39:29 [INFO] Prompt ID: 588c5907-9c0a-499c-b45c-97ab74498870
+2025-08-04 14:39:29 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 14:39:29 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 14:39:29 [INFO] Executing Step 1: CacheLookup
+2025-08-04 14:39:29 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 14:39:30 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x8
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment,estimated_cost,costo_asignado,costo_est_modelo
+18268_583.0_150.0_226.0_visa_credit_472.0_nan_gmail.com_gmail.com_155016.0_0.0_0.0_New_iOS 10.3.3_mobile safari 10.0_iOS Device,0.08,Riesgo alto,18.489,Transacciones,1.735005,7949167695,
+5986_533.0_150.0_224.0_mastercard_debit_299.0_nan_roadrunner.com_roadrunner.com_89940.0_0.0_0.0_New_Windows 10_firefox 57.0_Windows,0.08,Riesgo medio,82.775,Sin Servicio,0.43248,8468266860,9.77690569105691
+16095_500.0_185.0_224.0_mastercard_credit_nan_nan_hotmail.com_hotmail.com_810358.0_0.0_-1.0_Found_nan_chrome 65.0 for android_SM-A300H Build/LRX22G,0.08,Bajo riesgo,15.616,Préstamos,0.16783499999999998,9314763007,40212.943469785576
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos usuarios tienen mas de 0.1 de score?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 14:39:30 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 14:39:35 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 14:39:35 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x8
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment,estimated_cost,costo_asignado,costo_est_modelo
+18268_583.0_150.0_226.0_visa_credit_472.0_nan_gmail.com_gmail.com_155016.0_0.0_0.0_New_iOS 10.3.3_mobile safari 10.0_iOS Device,0.08,Riesgo alto,18.489,Transacciones,1.735005,7949167695,
+5986_533.0_150.0_224.0_mastercard_debit_299.0_nan_roadrunner.com_roadrunner.com_89940.0_0.0_0.0_New_Windows 10_firefox 57.0_Windows,0.08,Riesgo medio,82.775,Sin Servicio,0.43248,8468266860,9.77690569105691
+16095_500.0_185.0_224.0_mastercard_credit_nan_nan_hotmail.com_hotmail.com_810358.0_0.0_-1.0_Found_nan_chrome 65.0 for android_SM-A300H Build/LRX22G,0.08,Bajo riesgo,15.616,Préstamos,0.16783499999999998,9314763007,40212.943469785576
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos usuarios tienen mas de 0.1 de score?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 14:39:35 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+
+# Assuming dfs is already declared and contains the DataFrame
+# Concatenate all DataFrames in the list if there are multiple DataFrames
+df = pd.concat(dfs, ignore_index=True)
+
+# Count the number of users with a fraud score greater than 0.1
+count_users_above_threshold = df[df['fraud_score'] > 0.1].shape[0]
+
+# Declare result var: 
+result = {
+    "type": "number",
+    "value": count_users_above_threshold
+}
+            ```
+            
+2025-08-04 14:39:35 [INFO] Executing Step 4: CachePopulation
+2025-08-04 14:39:35 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 14:39:35 [INFO] 
+Code running:
+```
+df = pd.concat(dfs, ignore_index=True)
+count_users_above_threshold = df[df['fraud_score'] > 0.1].shape[0]
+result = {'type': 'number', 'value': count_users_above_threshold}
+        ```
+2025-08-04 14:39:35 [INFO] Executing Step 6: CodeExecution
+2025-08-04 14:39:35 [INFO] Executing Step 7: ResultValidation
+2025-08-04 14:39:35 [INFO] Answer: {'type': 'number', 'value': 0}
+2025-08-04 14:39:35 [INFO] Executing Step 8: ResultParsing
+2025-08-04 14:40:08 [INFO] Question: cuantos usuarios tienen mas de 0.1 de score?
+2025-08-04 14:40:08 [INFO] Running PandasAI with openai LLM...
+2025-08-04 14:40:08 [INFO] Prompt ID: a067e6d8-40b3-4bee-8834-90e528250507
+2025-08-04 14:40:08 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 14:40:08 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 14:40:08 [INFO] Executing Step 1: CacheLookup
+2025-08-04 14:40:08 [INFO] Using cached response
+2025-08-04 14:40:08 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 14:40:09 [INFO] Executing Step 2: Skipping...
+2025-08-04 14:40:09 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 14:40:09 [INFO] Executing Step 3: Skipping...
+2025-08-04 14:40:09 [INFO] Executing Step 4: CachePopulation
+2025-08-04 14:40:09 [INFO] Executing Step 4: Skipping...
+2025-08-04 14:40:09 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 14:40:09 [INFO] 
+Code running:
+```
+df = pd.concat(dfs, ignore_index=True)
+count_users_above_threshold = df[df['fraud_score'] > 0.1].shape[0]
+result = {'type': 'number', 'value': count_users_above_threshold}
+        ```
+2025-08-04 14:40:09 [INFO] Executing Step 6: CodeExecution
+2025-08-04 14:40:09 [INFO] Executing Step 7: ResultValidation
+2025-08-04 14:40:09 [INFO] Answer: {'type': 'number', 'value': 0}
+2025-08-04 14:40:09 [INFO] Executing Step 8: ResultParsing
+2025-08-04 14:40:21 [INFO] Question: cuantos usuarios tienen mas de 0.1 de score?
+2025-08-04 14:40:21 [INFO] Running PandasAI with openai LLM...
+2025-08-04 14:40:21 [INFO] Prompt ID: c685fd01-8c3e-495b-8058-9f54f17cca89
+2025-08-04 14:40:21 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 14:40:21 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 14:40:21 [INFO] Executing Step 1: CacheLookup
+2025-08-04 14:40:21 [INFO] Using cached response
+2025-08-04 14:40:21 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 14:40:21 [INFO] Executing Step 2: Skipping...
+2025-08-04 14:40:21 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 14:40:21 [INFO] Executing Step 3: Skipping...
+2025-08-04 14:40:21 [INFO] Executing Step 4: CachePopulation
+2025-08-04 14:40:21 [INFO] Executing Step 4: Skipping...
+2025-08-04 14:40:21 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 14:40:21 [INFO] 
+Code running:
+```
+df = pd.concat(dfs, ignore_index=True)
+count_users_above_threshold = df[df['fraud_score'] > 0.1].shape[0]
+result = {'type': 'number', 'value': count_users_above_threshold}
+        ```
+2025-08-04 14:40:21 [INFO] Executing Step 6: CodeExecution
+2025-08-04 14:40:21 [INFO] Executing Step 7: ResultValidation
+2025-08-04 14:40:21 [INFO] Answer: {'type': 'number', 'value': 0}
+2025-08-04 14:40:21 [INFO] Executing Step 8: ResultParsing
+2025-08-04 14:41:01 [INFO] Question: cuantos son los costos estimados por servicio?
+2025-08-04 14:41:01 [INFO] Running PandasAI with openai LLM...
+2025-08-04 14:41:01 [INFO] Prompt ID: 72141284-84b2-4a59-87e3-d103dfc3548a
+2025-08-04 14:41:01 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 14:41:01 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 14:41:01 [INFO] Executing Step 1: CacheLookup
+2025-08-04 14:41:01 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 14:41:01 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x8
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment,estimated_cost,costo_asignado,costo_est_modelo
+15863_158.0_150.0_226.0_visa_debit_177.0_nan_aol.com_gmail.com_59162.0_0.0_0.0_Found_Windows 10_chrome 61.0_Windows,0.08,Bajo riesgo,94.064,Tarjeta de Crédito,0.39615,122.21132113821139,9.77690569105691
+3404_111.0_150.0_228.0_visa_credit_384.0_nan_anonymous.com_anonymous.com_397077.0_1.0_-8.0_Found_Windows 10_chrome 63.0_Windows,0.08,Bajo riesgo,22.871,Tarjeta de Crédito,1.305075,122.21132113821139,9.77690569105691
+15497_490.0_150.0_226.0_visa_debit_299.0_nan_anonymous.com_anonymous.com_512179.0_2.0_0.0_Found_Windows 10_edge 16.0_Windows,0.08,Bajo riesgo,275.0,Tarjeta de Crédito,1.7116049999999998,122.21132113821139,9.77690569105691
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos son los costos estimados por servicio?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 14:41:01 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 14:41:12 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 14:41:12 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x8
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment,estimated_cost,costo_asignado,costo_est_modelo
+15863_158.0_150.0_226.0_visa_debit_177.0_nan_aol.com_gmail.com_59162.0_0.0_0.0_Found_Windows 10_chrome 61.0_Windows,0.08,Bajo riesgo,94.064,Tarjeta de Crédito,0.39615,122.21132113821139,9.77690569105691
+3404_111.0_150.0_228.0_visa_credit_384.0_nan_anonymous.com_anonymous.com_397077.0_1.0_-8.0_Found_Windows 10_chrome 63.0_Windows,0.08,Bajo riesgo,22.871,Tarjeta de Crédito,1.305075,122.21132113821139,9.77690569105691
+15497_490.0_150.0_226.0_visa_debit_299.0_nan_anonymous.com_anonymous.com_512179.0_2.0_0.0_Found_Windows 10_edge 16.0_Windows,0.08,Bajo riesgo,275.0,Tarjeta de Crédito,1.7116049999999998,122.21132113821139,9.77690569105691
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos son los costos estimados por servicio?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 14:41:12 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+
+# Assuming dfs is already defined and contains the DataFrame
+# For demonstration, let's create a sample DataFrame similar to the one provided
+data = {
+    'user_id': ['15863_158.0_150.0_226.0_visa_debit_177.0_nan_aol.com_gmail.com_59162.0_0.0_0.0_Found_Windows 10_chrome 61.0_Windows',
+                '3404_111.0_150.0_228.0_visa_credit_384.0_nan_anonymous.com_anonymous.com_397077.0_1.0_-8.0_Found_Windows 10_chrome 63.0_Windows',
+                '15497_490.0_150.0_226.0_visa_debit_299.0_nan_anonymous.com_anonymous.com_512179.0_2.0_0.0_Found_Windows 10_edge 16.0_Windows'],
+    'fraud_score': [0.08, 0.08, 0.08],
+    'risk_group': ['Bajo riesgo', 'Bajo riesgo', 'Bajo riesgo'],
+    'TransactionAmt': [94.064, 22.871, 275.0],
+    'service_assignment': ['Tarjeta de Crédito', 'Tarjeta de Crédito', 'Tarjeta de Crédito'],
+    'estimated_cost': [0.39615, 1.305075, 1.711605],
+    'costo_asignado': [122.21132113821139, 122.21132113821139, 122.21132113821139],
+    'costo_est_modelo': [9.77690569105691, 9.77690569105691, 9.77690569105691]
+}
+
+# Create DataFrame
+dfs = [pd.DataFrame(data)]
+
+# Calculate estimated costs by service
+costs_by_service = dfs[0].groupby('service_assignment')['estimated_cost'].sum().reset_index()
+
+# Declare result var: 
+result = {
+    "type": "dataframe",
+    "value": costs_by_service
+}
+
+# If you want to print the result for verification
+print(result['value'])
+            ```
+            
+2025-08-04 14:41:12 [INFO] Executing Step 4: CachePopulation
+2025-08-04 14:41:12 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 14:41:12 [INFO] 
+Code running:
+```
+data = {'user_id': ['15863_158.0_150.0_226.0_visa_debit_177.0_nan_aol.com_gmail.com_59162.0_0.0_0.0_Found_Windows 10_chrome 61.0_Windows', '3404_111.0_150.0_228.0_visa_credit_384.0_nan_anonymous.com_anonymous.com_397077.0_1.0_-8.0_Found_Windows 10_chrome 63.0_Windows', '15497_490.0_150.0_226.0_visa_debit_299.0_nan_anonymous.com_anonymous.com_512179.0_2.0_0.0_Found_Windows 10_edge 16.0_Windows'], 'fraud_score': [0.08, 0.08, 0.08], 'risk_group': ['Bajo riesgo', 'Bajo riesgo', 'Bajo riesgo'], 'TransactionAmt': [94.064, 22.871, 275.0], 'service_assignment': ['Tarjeta de Crédito', 'Tarjeta de Crédito', 'Tarjeta de Crédito'], 'estimated_cost': [0.39615, 1.305075, 1.711605], 'costo_asignado': [122.21132113821139, 122.21132113821139, 122.21132113821139], 'costo_est_modelo': [9.77690569105691, 9.77690569105691, 9.77690569105691]}
+costs_by_service = dfs[0].groupby('service_assignment')['estimated_cost'].sum().reset_index()
+result = {'type': 'dataframe', 'value': costs_by_service}
+print(result['value'])
+        ```
+2025-08-04 14:41:12 [INFO] Executing Step 6: CodeExecution
+2025-08-04 14:41:12 [INFO] Executing Step 7: ResultValidation
+2025-08-04 14:41:12 [INFO] Answer: {'type': 'dataframe', 'value':    service_assignment  estimated_cost
+0  Tarjeta de Crédito    23433.931275}
+2025-08-04 14:41:12 [INFO] Executing Step 8: ResultParsing
+2025-08-04 14:46:04 [INFO] Question: cuanto es el costo total de  tarjeta de crédito?
+2025-08-04 14:46:04 [INFO] Running PandasAI with openai LLM...
+2025-08-04 14:46:04 [INFO] Prompt ID: 1a24ce8f-f14c-4635-9c32-87194460bd66
+2025-08-04 14:46:04 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 14:46:04 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 14:46:04 [INFO] Executing Step 1: CacheLookup
+2025-08-04 14:46:04 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 14:46:04 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x8
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment,estimated_cost,costo_asignado,costo_est_modelo
+18268_583.0_150.0_226.0_visa_credit_272.0_nan_gmail.com_yahoo.com_376731.0_0.0_-9.0_Found_Windows 7_chrome 63.0_Windows,0.08,Fraude,76.664,Transacciones,6.0,7949037755,9.77690569105691
+7508_321.0_150.0_226.0_visa_debit_420.0_nan_anonymous.com_anonymous.com_159599.0_0.0_0.0_New_Windows 7_chrome 62.0_Windows,0.08,Bajo riesgo,48.447,Préstamos,0.49544,0465425598,
+11438_580.0_106.0_147.0_visa_credit_nan_nan_anonymous.com_anonymous.com_350098.0_0.0_0.0_Found_nan_chrome 64.0_Windows,0.08,Riesgo alto,39.761,Tarjeta de Crédito,1.63497,0142263596,660.5444578499054
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuanto es el costo total de  tarjeta de crédito?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 14:46:04 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 14:46:12 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 14:46:12 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x8
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment,estimated_cost,costo_asignado,costo_est_modelo
+18268_583.0_150.0_226.0_visa_credit_272.0_nan_gmail.com_yahoo.com_376731.0_0.0_-9.0_Found_Windows 7_chrome 63.0_Windows,0.08,Fraude,76.664,Transacciones,6.0,7949037755,9.77690569105691
+7508_321.0_150.0_226.0_visa_debit_420.0_nan_anonymous.com_anonymous.com_159599.0_0.0_0.0_New_Windows 7_chrome 62.0_Windows,0.08,Bajo riesgo,48.447,Préstamos,0.49544,0465425598,
+11438_580.0_106.0_147.0_visa_credit_nan_nan_anonymous.com_anonymous.com_350098.0_0.0_0.0_Found_nan_chrome 64.0_Windows,0.08,Riesgo alto,39.761,Tarjeta de Crédito,1.63497,0142263596,660.5444578499054
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuanto es el costo total de  tarjeta de crédito?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 14:46:12 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+
+# Assuming dfs is already declared and contains the DataFrame
+# Filter the DataFrame for credit card transactions
+credit_card_df = pd.concat(dfs)  # Combine all DataFrames in the list if there are multiple
+credit_card_transactions = credit_card_df[credit_card_df['service_assignment'] == 'Tarjeta de Crédito']
+
+# Calculate the total cost
+total_cost = credit_card_transactions['costo_asignado'].sum()
+
+# Declare result var: 
+result = {
+    "type": "number",
+    "value": total_cost
+}
+
+# If you want to print the result
+print(result)
+            ```
+            
+2025-08-04 14:46:12 [INFO] Executing Step 4: CachePopulation
+2025-08-04 14:46:12 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 14:46:12 [INFO] 
+Code running:
+```
+credit_card_df = pd.concat(dfs)
+credit_card_transactions = credit_card_df[credit_card_df['service_assignment'] == 'Tarjeta de Crédito']
+total_cost = credit_card_transactions['costo_asignado'].sum()
+result = {'type': 'number', 'value': total_cost}
+print(result)
+        ```
+2025-08-04 14:46:12 [INFO] Executing Step 6: CodeExecution
+2025-08-04 14:46:12 [INFO] Executing Step 7: ResultValidation
+2025-08-04 14:46:12 [INFO] Answer: {'type': 'number', 'value': 1713647.145}
+2025-08-04 14:46:12 [INFO] Executing Step 8: ResultParsing
+2025-08-04 14:57:10 [INFO] Question: cuantos usuarios tiene menos de 0.2 de score?
+2025-08-04 14:57:10 [INFO] Running PandasAI with openai LLM...
+2025-08-04 14:57:10 [INFO] Prompt ID: 7a638f19-9dfb-4fdf-bc18-8d2a996bf8b5
+2025-08-04 14:57:10 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 14:57:10 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 14:57:10 [INFO] Executing Step 1: CacheLookup
+2025-08-04 14:57:10 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 14:57:10 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x8
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment,estimated_cost,costo_asignado,costo_est_modelo
+18301_459.0_185.0_224.0_mastercard_credit_nan_nan_hotmail.com_hotmail.com_517506.0_1.0_0.0_New_nan_chrome generic_SAMSUNG SM-J700M Build/LMY48B,0.08,Riesgo medio,19.516,Transacciones,0.255795,6924401952,5892760380
+10750_382.0_150.0_226.0_visa_debit_204.0_nan_bellsouth.net_gmail.com_117669.0_0.0_0.0_New_iOS 11.2.6_mobile safari generic_iOS Device,0.08,Fraude,22.235,Tarjeta de Crédito,0.973845,1017246296,8232623017
+9633_296.0_185.0_138.0_visa_debit_nan_nan_hotmail.com_hotmail.com_80936.0_0.0_0.0_Found_nan_chrome 63.0_Windows,0.08,Bajo riesgo,22.268,Sin Servicio,0.20482499999999998,3742530530,2417698909
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos usuarios tiene menos de 0.2 de score?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 14:57:10 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 14:57:23 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 14:57:23 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x8
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment,estimated_cost,costo_asignado,costo_est_modelo
+18301_459.0_185.0_224.0_mastercard_credit_nan_nan_hotmail.com_hotmail.com_517506.0_1.0_0.0_New_nan_chrome generic_SAMSUNG SM-J700M Build/LMY48B,0.08,Riesgo medio,19.516,Transacciones,0.255795,6924401952,5892760380
+10750_382.0_150.0_226.0_visa_debit_204.0_nan_bellsouth.net_gmail.com_117669.0_0.0_0.0_New_iOS 11.2.6_mobile safari generic_iOS Device,0.08,Fraude,22.235,Tarjeta de Crédito,0.973845,1017246296,8232623017
+9633_296.0_185.0_138.0_visa_debit_nan_nan_hotmail.com_hotmail.com_80936.0_0.0_0.0_Found_nan_chrome 63.0_Windows,0.08,Bajo riesgo,22.268,Sin Servicio,0.20482499999999998,3742530530,2417698909
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos usuarios tiene menos de 0.2 de score?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 14:57:23 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+
+# Assuming dfs is already declared and contains the DataFrames
+# For this example, we will use the first DataFrame in the list
+df = dfs[0]
+
+# Count the number of users with a fraud score less than 0.2
+count_below_0_2 = df[df['fraud_score'] < 0.2].shape[0]
+
+# Declare result var: 
+result = {
+    "type": "number",
+    "value": count_below_0_2
+}
+            ```
+            
+2025-08-04 14:57:23 [INFO] Executing Step 4: CachePopulation
+2025-08-04 14:57:23 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 14:57:23 [INFO] 
+Code running:
+```
+df = dfs[0]
+count_below_0_2 = df[df['fraud_score'] < 0.2].shape[0]
+result = {'type': 'number', 'value': count_below_0_2}
+        ```
+2025-08-04 14:57:23 [INFO] Executing Step 6: CodeExecution
+2025-08-04 14:57:23 [INFO] Executing Step 7: ResultValidation
+2025-08-04 14:57:23 [INFO] Answer: {'type': 'number', 'value': 15195}
+2025-08-04 14:57:23 [INFO] Executing Step 8: ResultParsing
+2025-08-04 14:59:58 [INFO] Question: cuantos usuarios tienen todo el paquete de servicio?
+2025-08-04 14:59:58 [INFO] Running PandasAI with openai LLM...
+2025-08-04 14:59:58 [INFO] Prompt ID: 89501d96-0509-4109-a809-ae02a0969632
+2025-08-04 14:59:58 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 14:59:58 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 14:59:58 [INFO] Executing Step 1: CacheLookup
+2025-08-04 14:59:58 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 14:59:58 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x8
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment,estimated_cost,costo_asignado,costo_est_modelo
+4461_375.0_185.0_224.0_mastercard_debit_nan_nan_gmail.com_gmail.com_136821.0_1.0_-18.0_Found_nan_chrome 63.0 for android_SM-J320M Build/LMY47V,0.08,Bajo riesgo,16.857,Transacciones,0.61827,122.21132113821139,7988440981
+11839_490.0_150.0_226.0_visa_debit_226.0_nan_gmail.com_gmail.com_51272.0_0.0_0.0_New_iOS 11.2.1_mobile safari 11.0_iOS Device,0.08,Riesgo medio,29.879,Tarjeta de Crédito,0.145005,,7771769014
+3334_583.0_150.0_226.0_visa_credit_472.0_nan_comcast.net_gmail.com_45926.0_0.0_0.0_Found_Windows 10_chrome 65.0_Windows,0.08,Riesgo alto,12.446,Sin Servicio,0.60087,502661.79337231966,2861135104
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos usuarios tienen todo el paquete de servicio?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 14:59:58 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 15:00:03 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 15:00:03 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x8
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment,estimated_cost,costo_asignado,costo_est_modelo
+4461_375.0_185.0_224.0_mastercard_debit_nan_nan_gmail.com_gmail.com_136821.0_1.0_-18.0_Found_nan_chrome 63.0 for android_SM-J320M Build/LMY47V,0.08,Bajo riesgo,16.857,Transacciones,0.61827,122.21132113821139,7988440981
+11839_490.0_150.0_226.0_visa_debit_226.0_nan_gmail.com_gmail.com_51272.0_0.0_0.0_New_iOS 11.2.1_mobile safari 11.0_iOS Device,0.08,Riesgo medio,29.879,Tarjeta de Crédito,0.145005,,7771769014
+3334_583.0_150.0_226.0_visa_credit_472.0_nan_comcast.net_gmail.com_45926.0_0.0_0.0_Found_Windows 10_chrome 65.0_Windows,0.08,Riesgo alto,12.446,Sin Servicio,0.60087,502661.79337231966,2861135104
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos usuarios tienen todo el paquete de servicio?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 15:00:03 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+
+# Assuming dfs is already declared and contains the DataFrames
+# For this example, we will use the first DataFrame in the list
+df = dfs[0]
+
+# Count the number of users with the complete service package
+# Assuming "service_assignment" column indicates the type of service
+# and "Transacciones" indicates the complete service package
+complete_service_count = df[df['service_assignment'] == 'Transacciones'].shape[0]
+
+# Declare result var: 
+result = {
+    "type": "number",
+    "value": complete_service_count
+}
+            ```
+            
+2025-08-04 15:00:03 [INFO] Executing Step 4: CachePopulation
+2025-08-04 15:00:03 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 15:00:03 [INFO] 
+Code running:
+```
+df = dfs[0]
+complete_service_count = df[df['service_assignment'] == 'Transacciones'].shape[0]
+result = {'type': 'number', 'value': complete_service_count}
+        ```
+2025-08-04 15:00:03 [INFO] Executing Step 6: CodeExecution
+2025-08-04 15:00:03 [INFO] Executing Step 7: ResultValidation
+2025-08-04 15:00:03 [INFO] Answer: {'type': 'number', 'value': 201}
+2025-08-04 15:00:03 [INFO] Executing Step 8: ResultParsing
+2025-08-04 15:01:00 [INFO] Question: muchas gracias
+2025-08-04 15:01:00 [INFO] Running PandasAI with openai LLM...
+2025-08-04 15:01:00 [INFO] Prompt ID: 8243ae9e-f42c-4238-815a-d9dad3d139d8
+2025-08-04 15:01:00 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 15:01:00 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 15:01:00 [INFO] Executing Step 1: CacheLookup
+2025-08-04 15:01:00 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 15:01:00 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x8
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment,estimated_cost,costo_asignado,costo_est_modelo
+9152_468.0_150.0_100.0_visa_debit_191.0_nan_anonymous.com_gmail.com_105110.0_0.0_0.0_Found_Windows 10_ie 11.0 for tablet_Trident/7.0,0.08,Riesgo alto,24.836,Transacciones,0.154065,,5974841526
+10616_583.0_150.0_226.0_visa_credit_264.0_nan_yahoo.com_gmail.com_150845.0_3.0_-32.0_New_iOS 11.2.1_mobile safari 11.0_iOS Device,0.08,Riesgo medio,45.98,Préstamos,1.010745,502661.79337231966,6921341621
+15885_545.0_185.0_138.0_visa_debit_nan_nan_hotmail.com_hotmail.com_207610.0_0.0_0.0_Found_nan_chrome 65.0_Windows,0.08,Bajo riesgo,80.454,Sin Servicio,0.399675,122.21132113821139,4165511009
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ muchas gracias
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 15:01:00 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 15:01:10 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 15:01:10 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x8
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment,estimated_cost,costo_asignado,costo_est_modelo
+9152_468.0_150.0_100.0_visa_debit_191.0_nan_anonymous.com_gmail.com_105110.0_0.0_0.0_Found_Windows 10_ie 11.0 for tablet_Trident/7.0,0.08,Riesgo alto,24.836,Transacciones,0.154065,,5974841526
+10616_583.0_150.0_226.0_visa_credit_264.0_nan_yahoo.com_gmail.com_150845.0_3.0_-32.0_New_iOS 11.2.1_mobile safari 11.0_iOS Device,0.08,Riesgo medio,45.98,Préstamos,1.010745,502661.79337231966,6921341621
+15885_545.0_185.0_138.0_visa_debit_nan_nan_hotmail.com_hotmail.com_207610.0_0.0_0.0_Found_nan_chrome 65.0_Windows,0.08,Bajo riesgo,80.454,Sin Servicio,0.399675,122.21132113821139,4165511009
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ muchas gracias
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 15:01:10 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Assuming dfs is already declared and contains the DataFrame
+# For demonstration, let's use the first DataFrame in the list
+df = dfs[0]
+
+# Display the first few rows of the DataFrame
+print(df.head())
+
+# Calculate the average TransactionAmt
+average_transaction_amt = df['TransactionAmt'].mean()
+
+# Create a plot for Transaction Amounts
+plt.figure(figsize=(10, 6))
+plt.hist(df['TransactionAmt'], bins=30, color='blue', alpha=0.7)
+plt.title('Distribution of Transaction Amounts')
+plt.xlabel('Transaction Amount')
+plt.ylabel('Frequency')
+plt.grid(axis='y', alpha=0.75)
+
+# Save the plot as a PNG file
+plt.savefig('transaction_amount_distribution.png')
+
+# Declare result var: 
+result = {
+    "type": "number",
+    "value": average_transaction_amt
+}
+
+# If you want to include the plot in the result as well, you can do:
+# result = {
+#     "type": "plot",
+#     "value": "transaction_amount_distribution.png"
+# }
+            ```
+            
+2025-08-04 15:01:10 [INFO] Executing Step 4: CachePopulation
+2025-08-04 15:01:10 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 15:01:10 [INFO] Saving charts to /home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png
+2025-08-04 15:01:10 [INFO] 
+Code running:
+```
+df = dfs[0]
+print(df.head())
+average_transaction_amt = df['TransactionAmt'].mean()
+plt.figure(figsize=(10, 6))
+plt.hist(df['TransactionAmt'], bins=30, color='blue', alpha=0.7)
+plt.title('Distribution of Transaction Amounts')
+plt.xlabel('Transaction Amount')
+plt.ylabel('Frequency')
+plt.grid(axis='y', alpha=0.75)
+plt.savefig('/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png')
+result = {'type': 'number', 'value': average_transaction_amt}
+        ```
+2025-08-04 15:01:10 [INFO] Executing Step 6: CodeExecution
+2025-08-04 15:01:11 [INFO] Executing Step 7: ResultValidation
+2025-08-04 15:01:11 [INFO] Answer: {'type': 'number', 'value': 102.81422079631457}
+2025-08-04 15:01:11 [INFO] Executing Step 8: ResultParsing
+2025-08-04 15:10:54 [INFO] Question: como estas?
+2025-08-04 15:10:54 [INFO] Running PandasAI with openai LLM...
+2025-08-04 15:10:54 [INFO] Prompt ID: 4534feed-af37-40a6-bb8b-79ef5174ff04
+2025-08-04 15:10:54 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 15:10:54 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 15:10:54 [INFO] Executing Step 1: CacheLookup
+2025-08-04 15:10:55 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 15:10:55 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x8
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment,estimated_cost,costo_asignado,costo_est_modelo
+2616_327.0_150.0_102.0_discover_credit_299.0_nan_me.com_me.com_163255.0_0.0_0.0_Found_Mac OS X 10_12_4_safari generic_MacOS,0.08,Bajo riesgo,147.776,Transacciones,0.04728,1359313569,5524383070
+4504_500.0_185.0_219.0_mastercard_credit_nan_nan_gmail.com_gmail.com_324409.0_0.0_-10.0_Found_nan_chrome 64.0 for android_SM-S727VL Build/MMB29M,0.08,Fraude,80.454,Sin Servicio,0.15226499999999998,7908157403,8931201957
+15885_545.0_185.0_138.0_visa_debit_nan_nan_hotmail.com_hotmail.com_271061.0_1.0_0.0_New_nan_chrome 63.0_Windows,0.08,Riesgo medio,22.537,Préstamos,0.22825499999999999,3664538426,4927229176
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ como estas?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 15:10:55 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 15:11:04 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 15:11:05 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x8
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment,estimated_cost,costo_asignado,costo_est_modelo
+2616_327.0_150.0_102.0_discover_credit_299.0_nan_me.com_me.com_163255.0_0.0_0.0_Found_Mac OS X 10_12_4_safari generic_MacOS,0.08,Bajo riesgo,147.776,Transacciones,0.04728,1359313569,5524383070
+4504_500.0_185.0_219.0_mastercard_credit_nan_nan_gmail.com_gmail.com_324409.0_0.0_-10.0_Found_nan_chrome 64.0 for android_SM-S727VL Build/MMB29M,0.08,Fraude,80.454,Sin Servicio,0.15226499999999998,7908157403,8931201957
+15885_545.0_185.0_138.0_visa_debit_nan_nan_hotmail.com_hotmail.com_271061.0_1.0_0.0_New_nan_chrome 63.0_Windows,0.08,Riesgo medio,22.537,Préstamos,0.22825499999999999,3664538426,4927229176
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ como estas?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 15:11:05 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Assuming dfs is already declared and contains the DataFrame
+# For demonstration, let's use the first DataFrame in the list
+df = dfs[0]
+
+# Example analysis: Calculate the average fraud score and group by risk group
+average_fraud_score = df.groupby('risk_group')['fraud_score'].mean().reset_index()
+
+# Plotting the average fraud score by risk group
+plt.figure(figsize=(8, 5))
+plt.bar(average_fraud_score['risk_group'], average_fraud_score['fraud_score'], color=['green', 'orange', 'red'])
+plt.title('Average Fraud Score by Risk Group')
+plt.xlabel('Risk Group')
+plt.ylabel('Average Fraud Score')
+plt.xticks(rotation=45)
+plt.tight_layout()
+
+# Save the plot as a PNG file
+plot_filename = 'average_fraud_score_by_risk_group.png'
+plt.savefig(plot_filename)
+
+# Declare result var: 
+result = {
+    "type": "plot",
+    "value": plot_filename
+}
+            ```
+            
+2025-08-04 15:11:05 [INFO] Executing Step 4: CachePopulation
+2025-08-04 15:11:05 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 15:11:05 [INFO] Saving charts to /home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png
+2025-08-04 15:11:05 [INFO] 
+Code running:
+```
+df = dfs[0]
+average_fraud_score = df.groupby('risk_group')['fraud_score'].mean().reset_index()
+plt.figure(figsize=(8, 5))
+plt.bar(average_fraud_score['risk_group'], average_fraud_score['fraud_score'], color=['green', 'orange', 'red'])
+plt.title('Average Fraud Score by Risk Group')
+plt.xlabel('Risk Group')
+plt.ylabel('Average Fraud Score')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plot_filename = '/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png'
+plt.savefig(plot_filename)
+result = {'type': 'plot', 'value': plot_filename}
+        ```
+2025-08-04 15:11:05 [INFO] Executing Step 6: CodeExecution
+2025-08-04 15:11:05 [INFO] Executing Step 7: ResultValidation
+2025-08-04 15:11:05 [INFO] Answer: {'type': 'plot', 'value': '/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png'}
+2025-08-04 15:11:05 [INFO] Executing Step 8: ResultParsing
+2025-08-04 15:37:43 [INFO] Question: hola como estas
+2025-08-04 15:37:43 [INFO] Running PandasAI with openai LLM...
+2025-08-04 15:37:43 [INFO] Prompt ID: 7634465a-a12a-447d-82df-7d423656397b
+2025-08-04 15:37:43 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 15:37:43 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 15:37:43 [INFO] Executing Step 1: CacheLookup
+2025-08-04 15:37:43 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 15:37:44 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+16136_204.0_185.0_138.0_visa_debit_nan_nan_gmail.com_gmail.com_159996.0_0.0_0.0_Found_nan_chrome 63.0 for android_Moto G Play Build/MPIS24.241-15.3-7,2844947456,Bajo riesgo,96.524,Paquete de Servicios completo
+3154_408.0_185.0_224.0_mastercard_debit_nan_nan_live.com.mx_live.com.mx_253999.0_0.0_0.0_New_nan_chrome generic for android_Moto Z2 Play Build/NPSS26.118-19-11,6832776055,Riesgo alto,13.655,Sin Paquete de Servicios
+3957_233.0_150.0_162.0_visa_credit_441.0_nan_gmail.com_hotmail.com_94171.0_1.0_0.0_Found_iOS 10.3.3_mobile safari generic_iOS Device,7836814801,Fraude,4.433,Paquete de Servicios medio
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ hola como estas
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 15:37:44 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 15:37:58 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 15:37:58 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+16136_204.0_185.0_138.0_visa_debit_nan_nan_gmail.com_gmail.com_159996.0_0.0_0.0_Found_nan_chrome 63.0 for android_Moto G Play Build/MPIS24.241-15.3-7,2844947456,Bajo riesgo,96.524,Paquete de Servicios completo
+3154_408.0_185.0_224.0_mastercard_debit_nan_nan_live.com.mx_live.com.mx_253999.0_0.0_0.0_New_nan_chrome generic for android_Moto Z2 Play Build/NPSS26.118-19-11,6832776055,Riesgo alto,13.655,Sin Paquete de Servicios
+3957_233.0_150.0_162.0_visa_credit_441.0_nan_gmail.com_hotmail.com_94171.0_1.0_0.0_Found_iOS 10.3.3_mobile safari generic_iOS Device,7836814801,Fraude,4.433,Paquete de Servicios medio
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ hola como estas
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 15:37:58 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Assuming dfs is already declared and contains the DataFrame
+# For demonstration, let's create a sample DataFrame similar to the one you provided
+data = {
+    "user_id": [
+        "16136_204.0_185.0_138.0_visa_debit_nan_nan_gmail.com_gmail.com_159996.0_0.0_0.0_Found_nan_chrome",
+        "3154_408.0_185.0_224.0_mastercard_debit_nan_nan_live.com.mx_live.com.mx_253999.0_0.0_0.0_New_nan_chrome",
+        "3957_233.0_150.0_162.0_visa_credit_441.0_nan_gmail.com_hotmail.com_94171.0_1.0_0.0_Found_iOS 10.3.3_mobile safari generic"
+    ],
+    "fraud_score": [63.0, 13.655, 4.433],
+    "risk_group": ["Bajo riesgo", "Riesgo alto", "Fraude"],
+    "TransactionAmt": [159996.0, 253999.0, 94171.0],
+    "service_assignment": ["Paquete de Servicios completo", "Sin Paquete de Servicios", "Paquete de Servicios medio"]
+}
+
+dfs = [pd.DataFrame(data)]
+
+# Example analysis: Calculate the average fraud score by risk group
+average_fraud_score = dfs[0].groupby('risk_group')['fraud_score'].mean().reset_index()
+
+# Plotting the average fraud score by risk group
+plt.figure(figsize=(8, 5))
+plt.bar(average_fraud_score['risk_group'], average_fraud_score['fraud_score'], color='skyblue')
+plt.title('Average Fraud Score by Risk Group')
+plt.xlabel('Risk Group')
+plt.ylabel('Average Fraud Score')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig('average_fraud_score_by_risk_group.png')
+
+# Declare result var: 
+result = {
+    "type": "plot",
+    "value": "average_fraud_score_by_risk_group.png"
+}
+            ```
+            
+2025-08-04 15:37:58 [INFO] Executing Step 4: CachePopulation
+2025-08-04 15:37:58 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 15:37:58 [INFO] Saving charts to /home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png
+2025-08-04 15:37:58 [INFO] 
+Code running:
+```
+data = {'user_id': ['16136_204.0_185.0_138.0_visa_debit_nan_nan_gmail.com_gmail.com_159996.0_0.0_0.0_Found_nan_chrome', '3154_408.0_185.0_224.0_mastercard_debit_nan_nan_live.com.mx_live.com.mx_253999.0_0.0_0.0_New_nan_chrome', '3957_233.0_150.0_162.0_visa_credit_441.0_nan_gmail.com_hotmail.com_94171.0_1.0_0.0_Found_iOS 10.3.3_mobile safari generic'], 'fraud_score': [63.0, 13.655, 4.433], 'risk_group': ['Bajo riesgo', 'Riesgo alto', 'Fraude'], 'TransactionAmt': [159996.0, 253999.0, 94171.0], 'service_assignment': ['Paquete de Servicios completo', 'Sin Paquete de Servicios', 'Paquete de Servicios medio']}
+average_fraud_score = dfs[0].groupby('risk_group')['fraud_score'].mean().reset_index()
+plt.figure(figsize=(8, 5))
+plt.bar(average_fraud_score['risk_group'], average_fraud_score['fraud_score'], color='skyblue')
+plt.title('Average Fraud Score by Risk Group')
+plt.xlabel('Risk Group')
+plt.ylabel('Average Fraud Score')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig('/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png')
+result = {'type': 'plot', 'value': '/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png'}
+        ```
+2025-08-04 15:37:58 [INFO] Executing Step 6: CodeExecution
+2025-08-04 15:37:59 [INFO] Executing Step 7: ResultValidation
+2025-08-04 15:37:59 [INFO] Answer: {'type': 'plot', 'value': '/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png'}
+2025-08-04 15:37:59 [INFO] Executing Step 8: ResultParsing
+2025-08-04 15:38:41 [INFO] Question: cuantos usuarios tienen mas de 0.1 de score?
+2025-08-04 15:38:41 [INFO] Running PandasAI with openai LLM...
+2025-08-04 15:38:41 [INFO] Prompt ID: be359fdf-0e6e-4aab-b49c-354f752f9259
+2025-08-04 15:38:41 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 15:38:42 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 15:38:42 [INFO] Executing Step 1: CacheLookup
+2025-08-04 15:38:42 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 15:38:42 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+13780_298.0_150.0_226.0_visa_debit_441.0_nan_yahoo.com_yahoo.com_254620.0_0.0_0.0_Found_Windows 7_chrome 62.0_Windows,0.001685131,Riesgo alto,63.924,Paquete de Servicios medio
+7800_268.0_150.0_166.0_visa_debit_436.0_nan_gmail.com_gmail.com_277650.0_0.0_0.0_Found_Windows 7_chrome 63.0_Windows,0.00045586049,Riesgo medio,55.639,Sin Paquete de Servicios
+13832_375.0_185.0_224.0_mastercard_debit_nan_nan_yahoo.com_yahoo.com_171076.0_0.0_-6.0_Found_nan_chrome 65.0_Windows,0.031541258,Bajo riesgo,51.071,Paquete de Servicios completo
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos usuarios tienen mas de 0.1 de score?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 15:38:42 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 15:38:45 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 15:38:46 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+13780_298.0_150.0_226.0_visa_debit_441.0_nan_yahoo.com_yahoo.com_254620.0_0.0_0.0_Found_Windows 7_chrome 62.0_Windows,0.001685131,Riesgo alto,63.924,Paquete de Servicios medio
+7800_268.0_150.0_166.0_visa_debit_436.0_nan_gmail.com_gmail.com_277650.0_0.0_0.0_Found_Windows 7_chrome 63.0_Windows,0.00045586049,Riesgo medio,55.639,Sin Paquete de Servicios
+13832_375.0_185.0_224.0_mastercard_debit_nan_nan_yahoo.com_yahoo.com_171076.0_0.0_-6.0_Found_nan_chrome 65.0_Windows,0.031541258,Bajo riesgo,51.071,Paquete de Servicios completo
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos usuarios tienen mas de 0.1 de score?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 15:38:46 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+
+# Assuming dfs is already defined as a list of DataFrames
+# For this example, we will use the first DataFrame in the list
+df = dfs[0]
+
+# Count the number of users with a fraud score greater than 0.1
+count_users_above_0_1 = df[df['fraud_score'] > 0.1].shape[0]
+
+# Declare result var: 
+result = {
+    "type": "number",
+    "value": count_users_above_0_1
+}
+            ```
+            
+2025-08-04 15:38:46 [INFO] Executing Step 4: CachePopulation
+2025-08-04 15:38:46 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 15:38:46 [INFO] 
+Code running:
+```
+df = dfs[0]
+count_users_above_0_1 = df[df['fraud_score'] > 0.1].shape[0]
+result = {'type': 'number', 'value': count_users_above_0_1}
+        ```
+2025-08-04 15:38:46 [INFO] Executing Step 6: CodeExecution
+2025-08-04 15:38:46 [INFO] Executing Step 7: ResultValidation
+2025-08-04 15:38:46 [INFO] Answer: {'type': 'number', 'value': 1522}
+2025-08-04 15:38:46 [INFO] Executing Step 8: ResultParsing
+2025-08-04 15:59:10 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 15:59:31 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 16:35:33 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 16:36:26 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 16:40:28 [INFO] Question: hola como estas
+2025-08-04 16:40:28 [INFO] Running PandasAI with openai LLM...
+2025-08-04 16:40:28 [INFO] Prompt ID: 87d90a88-46c2-462d-ba3d-89c482a2849e
+2025-08-04 16:40:28 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 16:40:28 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 16:40:28 [INFO] Executing Step 1: CacheLookup
+2025-08-04 16:40:29 [INFO] Using cached response
+2025-08-04 16:40:29 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 16:40:29 [INFO] Executing Step 2: Skipping...
+2025-08-04 16:40:29 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 16:40:29 [INFO] Executing Step 3: Skipping...
+2025-08-04 16:40:29 [INFO] Executing Step 4: CachePopulation
+2025-08-04 16:40:29 [INFO] Executing Step 4: Skipping...
+2025-08-04 16:40:29 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 16:40:29 [INFO] Saving charts to /home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png
+2025-08-04 16:40:29 [INFO] 
+Code running:
+```
+data = {'user_id': ['16136_204.0_185.0_138.0_visa_debit_nan_nan_gmail.com_gmail.com_159996.0_0.0_0.0_Found_nan_chrome', '3154_408.0_185.0_224.0_mastercard_debit_nan_nan_live.com.mx_live.com.mx_253999.0_0.0_0.0_New_nan_chrome', '3957_233.0_150.0_162.0_visa_credit_441.0_nan_gmail.com_hotmail.com_94171.0_1.0_0.0_Found_iOS 10.3.3_mobile safari generic'], 'fraud_score': [63.0, 13.655, 4.433], 'risk_group': ['Bajo riesgo', 'Riesgo alto', 'Fraude'], 'TransactionAmt': [159996.0, 253999.0, 94171.0], 'service_assignment': ['Paquete de Servicios completo', 'Sin Paquete de Servicios', 'Paquete de Servicios medio']}
+average_fraud_score = dfs[0].groupby('risk_group')['fraud_score'].mean().reset_index()
+plt.figure(figsize=(8, 5))
+plt.bar(average_fraud_score['risk_group'], average_fraud_score['fraud_score'], color='skyblue')
+plt.title('Average Fraud Score by Risk Group')
+plt.xlabel('Risk Group')
+plt.ylabel('Average Fraud Score')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig('/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png')
+result = {'type': 'plot', 'value': '/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png'}
+        ```
+2025-08-04 16:40:29 [INFO] Executing Step 6: CodeExecution
+2025-08-04 16:40:30 [INFO] Executing Step 7: ResultValidation
+2025-08-04 16:40:30 [INFO] Answer: {'type': 'plot', 'value': '/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png'}
+2025-08-04 16:40:30 [INFO] Executing Step 8: ResultParsing
+2025-08-04 16:40:54 [INFO] Question: cuantos usuarios tiene mas de 0.1 de score?
+2025-08-04 16:40:54 [INFO] Running PandasAI with openai LLM...
+2025-08-04 16:40:54 [INFO] Prompt ID: 988dedcc-23d6-465f-b697-e0983c04e6f8
+2025-08-04 16:40:54 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 16:40:54 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 16:40:54 [INFO] Executing Step 1: CacheLookup
+2025-08-04 16:40:54 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 16:40:54 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+3154_408.0_185.0_224.0_mastercard_debit_nan_nan_hotmail.com_hotmail.com_125003.0_0.0_0.0_Found_nan_chrome 64.0_Windows,4818569342,Bajo riesgo,29.441,Paquete de Servicios medio
+9305_399.0_150.0_137.0_american express_credit_472.0_nan_gmail.com_aol.com_56425.0_0.0_0.0_Found_Mac OS X 10_13_1_chrome generic_MacOS,8467138610,Riesgo alto,39.163,Paquete de Servicios simple
+4030_174.0_150.0_226.0_visa_debit_126.0_nan_hotmail.com_gmail.com_97037.0_0.0_0.0_Found_Android 7.0_samsung browser 6.2_SAMSUNG SM-G935T Build/NRD90M,9517179504,Fraude,51.84,Paquete de Servicios completo
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos usuarios tiene mas de 0.1 de score?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 16:40:54 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 16:41:00 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 16:41:00 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+3154_408.0_185.0_224.0_mastercard_debit_nan_nan_hotmail.com_hotmail.com_125003.0_0.0_0.0_Found_nan_chrome 64.0_Windows,4818569342,Bajo riesgo,29.441,Paquete de Servicios medio
+9305_399.0_150.0_137.0_american express_credit_472.0_nan_gmail.com_aol.com_56425.0_0.0_0.0_Found_Mac OS X 10_13_1_chrome generic_MacOS,8467138610,Riesgo alto,39.163,Paquete de Servicios simple
+4030_174.0_150.0_226.0_visa_debit_126.0_nan_hotmail.com_gmail.com_97037.0_0.0_0.0_Found_Android 7.0_samsung browser 6.2_SAMSUNG SM-G935T Build/NRD90M,9517179504,Fraude,51.84,Paquete de Servicios completo
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos usuarios tiene mas de 0.1 de score?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 16:41:00 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+
+# Assuming dfs is already declared and contains the DataFrame
+# Concatenate all DataFrames in the list if there are multiple DataFrames
+df = pd.concat(dfs, ignore_index=True)
+
+# Count the number of users with a fraud score greater than 0.1
+count_users_above_threshold = df[df['fraud_score'] > 0.1].shape[0]
+
+# Declare result var: 
+result = {
+    "type": "number",
+    "value": count_users_above_threshold
+}
+            ```
+            
+2025-08-04 16:41:00 [INFO] Executing Step 4: CachePopulation
+2025-08-04 16:41:00 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 16:41:00 [INFO] 
+Code running:
+```
+df = pd.concat(dfs, ignore_index=True)
+count_users_above_threshold = df[df['fraud_score'] > 0.1].shape[0]
+result = {'type': 'number', 'value': count_users_above_threshold}
+        ```
+2025-08-04 16:41:00 [INFO] Executing Step 6: CodeExecution
+2025-08-04 16:41:00 [INFO] Executing Step 7: ResultValidation
+2025-08-04 16:41:00 [INFO] Answer: {'type': 'number', 'value': 1522}
+2025-08-04 16:41:00 [INFO] Executing Step 8: ResultParsing
+2025-08-04 16:44:52 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 16:45:16 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 16:58:13 [INFO] Question: hola como estas?
+2025-08-04 16:58:13 [INFO] Running PandasAI with openai LLM...
+2025-08-04 16:58:13 [INFO] Prompt ID: 3c2da89e-0bfc-431c-923f-13eacd668dcf
+2025-08-04 16:58:13 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 16:58:13 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 16:58:13 [INFO] Executing Step 1: CacheLookup
+2025-08-04 16:58:14 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 16:58:14 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+7493_515.0_119.0_102.0_visa_credit_nan_nan_anonymous.com_anonymous.com_187158.0_2.0_-6.0_Found_nan_ie 11.0 for desktop_Trident/7.0,5022531006,Fraude,457.138,Paquete de Servicios simple
+12944_349.0_117.0_226.0_visa_debit_nan_nan_gmail.com_gmail.com_49494.0_0.0_0.0_Found_nan_chrome 65.0_Windows,0085701605,Riesgo medio,15.045,Paquete de Servicios medio
+9808_392.0_150.0_117.0_mastercard_debit_327.0_nan_anonymous.com_anonymous.com_65969.0_0.0_0.0_New_Mac OS X 10_12_5_chrome 63.0_MacOS,8316466342,Riesgo alto,74.698,Paquete de Servicios completo
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ hola como estas?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 16:58:14 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 16:58:29 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 16:58:29 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+7493_515.0_119.0_102.0_visa_credit_nan_nan_anonymous.com_anonymous.com_187158.0_2.0_-6.0_Found_nan_ie 11.0 for desktop_Trident/7.0,5022531006,Fraude,457.138,Paquete de Servicios simple
+12944_349.0_117.0_226.0_visa_debit_nan_nan_gmail.com_gmail.com_49494.0_0.0_0.0_Found_nan_chrome 65.0_Windows,0085701605,Riesgo medio,15.045,Paquete de Servicios medio
+9808_392.0_150.0_117.0_mastercard_debit_327.0_nan_anonymous.com_anonymous.com_65969.0_0.0_0.0_New_Mac OS X 10_12_5_chrome 63.0_MacOS,8316466342,Riesgo alto,74.698,Paquete de Servicios completo
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ hola como estas?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 16:58:29 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Assuming dfs is already declared and contains the DataFrames
+# For demonstration, let's create a sample DataFrame similar to the one you provided
+data = {
+    "user_id": [
+        "7493_515.0_119.0_102.0_visa_credit_nan_nan_anonymous.com_anonymous.com_187158.0_2.0_-6.0_Found_nan_ie 11.0 for desktop_Trident/7.0",
+        "12944_349.0_117.0_226.0_visa_debit_nan_nan_gmail.com_gmail.com_49494.0_0.0_0.0_Found_nan_chrome 65.0_Windows",
+        "9808_392.0_150.0_117.0_mastercard_debit_327.0_nan_anonymous.com_anonymous.com_65969.0_0.0_0.0_New_Mac OS X 10_12_5_chrome 63.0_MacOS"
+    ],
+    "fraud_score": [15195, 12944, 9808],
+    "risk_group": ["Fraude", "Riesgo medio", "Riesgo alto"],
+    "TransactionAmt": [457.138, 15.045, 74.698],
+    "service_assignment": ["Paquete de Servicios simple", "Paquete de Servicios medio", "Paquete de Servicios completo"]
+}
+
+dfs = [pd.DataFrame(data)]
+
+# Example of processing the DataFrame
+# Calculate the average transaction amount
+average_transaction_amt = dfs[0]['TransactionAmt'].mean()
+
+# Create a bar plot for the transaction amounts by risk group
+plt.figure(figsize=(10, 6))
+dfs[0].groupby('risk_group')['TransactionAmt'].mean().plot(kind='bar', color='skyblue')
+plt.title('Average Transaction Amount by Risk Group')
+plt.xlabel('Risk Group')
+plt.ylabel('Average Transaction Amount')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig('average_transaction_amount_by_risk_group.png')
+
+# Declare result var: 
+result = {
+    "type": "string",
+    "value": f"The average transaction amount is {average_transaction_amt:.2f}."
+}
+            ```
+            
+2025-08-04 16:58:29 [INFO] Executing Step 4: CachePopulation
+2025-08-04 16:58:29 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 16:58:29 [INFO] Saving charts to /home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png
+2025-08-04 16:58:29 [INFO] 
+Code running:
+```
+data = {'user_id': ['7493_515.0_119.0_102.0_visa_credit_nan_nan_anonymous.com_anonymous.com_187158.0_2.0_-6.0_Found_nan_ie 11.0 for desktop_Trident/7.0', '12944_349.0_117.0_226.0_visa_debit_nan_nan_gmail.com_gmail.com_49494.0_0.0_0.0_Found_nan_chrome 65.0_Windows', '9808_392.0_150.0_117.0_mastercard_debit_327.0_nan_anonymous.com_anonymous.com_65969.0_0.0_0.0_New_Mac OS X 10_12_5_chrome 63.0_MacOS'], 'fraud_score': [15195, 12944, 9808], 'risk_group': ['Fraude', 'Riesgo medio', 'Riesgo alto'], 'TransactionAmt': [457.138, 15.045, 74.698], 'service_assignment': ['Paquete de Servicios simple', 'Paquete de Servicios medio', 'Paquete de Servicios completo']}
+average_transaction_amt = dfs[0]['TransactionAmt'].mean()
+plt.figure(figsize=(10, 6))
+dfs[0].groupby('risk_group')['TransactionAmt'].mean().plot(kind='bar', color='skyblue')
+plt.title('Average Transaction Amount by Risk Group')
+plt.xlabel('Risk Group')
+plt.ylabel('Average Transaction Amount')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig('/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png')
+result = {'type': 'string', 'value': f'The average transaction amount is {average_transaction_amt:.2f}.'}
+        ```
+2025-08-04 16:58:29 [INFO] Executing Step 6: CodeExecution
+2025-08-04 16:58:29 [INFO] Executing Step 7: ResultValidation
+2025-08-04 16:58:29 [INFO] Answer: {'type': 'string', 'value': 'The average transaction amount is 102.81.'}
+2025-08-04 16:58:29 [INFO] Executing Step 8: ResultParsing
+2025-08-04 16:58:41 [INFO] Question: cuantos usuarios tienen mas de 0.1 de probabilidad de fraude? 
+2025-08-04 16:58:41 [INFO] Running PandasAI with openai LLM...
+2025-08-04 16:58:41 [INFO] Prompt ID: 3ebb5851-14cf-4ffc-9938-6cdcf123f8a0
+2025-08-04 16:58:41 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 16:58:41 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 16:58:41 [INFO] Executing Step 1: CacheLookup
+2025-08-04 16:58:41 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 16:58:41 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+10866_399.0_150.0_185.0_american express_credit_469.0_nan_anonymous.com_anonymous.com_55084.0_1.0_0.0_New_Mac OS X 10_13_5_safari generic_MacOS,0.04264383,Fraude,41.267,Paquete de Servicios simple
+3154_408.0_185.0_224.0_mastercard_debit_nan_nan_outlook.com_outlook.com_451210.0_1.0_-26.0_New_nan_chrome 50.0 for android_Lenovo A2016b30 Build/MRA58K,0.00031818787,Riesgo medio,10.1,Paquete de Servicios completo
+7616_555.0_119.0_162.0_visa_credit_296.0_nan_hotmail.com_hotmail.com_35108.0_0.0_0.0_Found_Windows 10_chrome 66.0_Windows,0.0019092215,Bajo riesgo,32.808,Paquete de Servicios medio
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos usuarios tienen mas de 0.1 de probabilidad de fraude? 
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 16:58:41 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 16:58:50 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 16:58:50 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+10866_399.0_150.0_185.0_american express_credit_469.0_nan_anonymous.com_anonymous.com_55084.0_1.0_0.0_New_Mac OS X 10_13_5_safari generic_MacOS,0.04264383,Fraude,41.267,Paquete de Servicios simple
+3154_408.0_185.0_224.0_mastercard_debit_nan_nan_outlook.com_outlook.com_451210.0_1.0_-26.0_New_nan_chrome 50.0 for android_Lenovo A2016b30 Build/MRA58K,0.00031818787,Riesgo medio,10.1,Paquete de Servicios completo
+7616_555.0_119.0_162.0_visa_credit_296.0_nan_hotmail.com_hotmail.com_35108.0_0.0_0.0_Found_Windows 10_chrome 66.0_Windows,0.0019092215,Bajo riesgo,32.808,Paquete de Servicios medio
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuantos usuarios tienen mas de 0.1 de probabilidad de fraude? 
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 16:58:50 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+
+# Assuming dfs is already declared and contains the DataFrame
+# Concatenate all DataFrames in the list if there are multiple DataFrames
+df = pd.concat(dfs, ignore_index=True)
+
+# Count the number of users with a fraud score greater than 0.1
+count_fraud_users = df[df['fraud_score'] > 0.1].shape[0]
+
+# Declare result var: 
+result = {
+    "type": "number",
+    "value": count_fraud_users
+}
+            ```
+            
+2025-08-04 16:58:50 [INFO] Executing Step 4: CachePopulation
+2025-08-04 16:58:50 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 16:58:50 [INFO] 
+Code running:
+```
+df = pd.concat(dfs, ignore_index=True)
+count_fraud_users = df[df['fraud_score'] > 0.1].shape[0]
+result = {'type': 'number', 'value': count_fraud_users}
+        ```
+2025-08-04 16:58:50 [INFO] Executing Step 6: CodeExecution
+2025-08-04 16:58:50 [INFO] Executing Step 7: ResultValidation
+2025-08-04 16:58:50 [INFO] Answer: {'type': 'number', 'value': 1522}
+2025-08-04 16:58:50 [INFO] Executing Step 8: ResultParsing
+2025-08-04 16:58:52 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 17:04:22 [INFO] Question: hola como estas?
+2025-08-04 17:04:22 [INFO] Running PandasAI with openai LLM...
+2025-08-04 17:04:22 [INFO] Prompt ID: c6501c20-b738-4f94-a6e2-948bd38bfaa9
+2025-08-04 17:04:22 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 17:04:22 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 17:04:22 [INFO] Executing Step 1: CacheLookup
+2025-08-04 17:04:22 [INFO] Using cached response
+2025-08-04 17:04:22 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 17:04:22 [INFO] Executing Step 2: Skipping...
+2025-08-04 17:04:22 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 17:04:22 [INFO] Executing Step 3: Skipping...
+2025-08-04 17:04:22 [INFO] Executing Step 4: CachePopulation
+2025-08-04 17:04:26 [INFO] Executing Step 4: Skipping...
+2025-08-04 17:04:26 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 17:04:26 [INFO] Saving charts to /home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png
+2025-08-04 17:04:26 [INFO] 
+Code running:
+```
+data = {'user_id': ['7493_515.0_119.0_102.0_visa_credit_nan_nan_anonymous.com_anonymous.com_187158.0_2.0_-6.0_Found_nan_ie 11.0 for desktop_Trident/7.0', '12944_349.0_117.0_226.0_visa_debit_nan_nan_gmail.com_gmail.com_49494.0_0.0_0.0_Found_nan_chrome 65.0_Windows', '9808_392.0_150.0_117.0_mastercard_debit_327.0_nan_anonymous.com_anonymous.com_65969.0_0.0_0.0_New_Mac OS X 10_12_5_chrome 63.0_MacOS'], 'fraud_score': [15195, 12944, 9808], 'risk_group': ['Fraude', 'Riesgo medio', 'Riesgo alto'], 'TransactionAmt': [457.138, 15.045, 74.698], 'service_assignment': ['Paquete de Servicios simple', 'Paquete de Servicios medio', 'Paquete de Servicios completo']}
+average_transaction_amt = dfs[0]['TransactionAmt'].mean()
+plt.figure(figsize=(10, 6))
+dfs[0].groupby('risk_group')['TransactionAmt'].mean().plot(kind='bar', color='skyblue')
+plt.title('Average Transaction Amount by Risk Group')
+plt.xlabel('Risk Group')
+plt.ylabel('Average Transaction Amount')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig('/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png')
+result = {'type': 'string', 'value': f'The average transaction amount is {average_transaction_amt:.2f}.'}
+        ```
+2025-08-04 17:04:26 [INFO] Executing Step 6: CodeExecution
+2025-08-04 17:04:26 [INFO] Executing Step 7: ResultValidation
+2025-08-04 17:04:26 [INFO] Answer: {'type': 'string', 'value': 'The average transaction amount is 102.81.'}
+2025-08-04 17:04:26 [INFO] Executing Step 8: ResultParsing
+2025-08-04 17:06:07 [INFO] Question: cuanto s usuarios tienen bajo riesgo?
+2025-08-04 17:06:07 [INFO] Running PandasAI with openai LLM...
+2025-08-04 17:06:07 [INFO] Prompt ID: b7147cd1-a14f-44fe-8866-1d55701dc8e0
+2025-08-04 17:06:07 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 17:06:07 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 17:06:07 [INFO] Executing Step 1: CacheLookup
+2025-08-04 17:06:07 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 17:06:07 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+3901_176.0_185.0_224.0_mastercard_credit_nan_nan_gmail.com_gmail.com_84479.0_1.0_-6.0_Found_nan_chrome 63.0_Windows,0.32305637,Riesgo alto,27.975,Sin Paquete de Servicios
+18268_583.0_150.0_226.0_visa_credit_299.0_nan_aol.com_hotmail.com_174733.0_5.0_0.0_New_iOS 11.2.1_mobile safari generic_iOS Device,0.023802932,Bajo riesgo,48.989,Paquete de Servicios medio
+1306_399.0_150.0_236.0_american express_credit_272.0_nan_gmail.com_gmail.com_80748.0_3.0_0.0_Found_Windows 7_firefox 57.0_Windows,0.0026725763,Riesgo medio,20.174,Paquete de Servicios completo
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuanto s usuarios tienen bajo riesgo?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 17:06:07 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 17:06:15 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 17:06:15 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+3901_176.0_185.0_224.0_mastercard_credit_nan_nan_gmail.com_gmail.com_84479.0_1.0_-6.0_Found_nan_chrome 63.0_Windows,0.32305637,Riesgo alto,27.975,Sin Paquete de Servicios
+18268_583.0_150.0_226.0_visa_credit_299.0_nan_aol.com_hotmail.com_174733.0_5.0_0.0_New_iOS 11.2.1_mobile safari generic_iOS Device,0.023802932,Bajo riesgo,48.989,Paquete de Servicios medio
+1306_399.0_150.0_236.0_american express_credit_272.0_nan_gmail.com_gmail.com_80748.0_3.0_0.0_Found_Windows 7_firefox 57.0_Windows,0.0026725763,Riesgo medio,20.174,Paquete de Servicios completo
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ cuanto s usuarios tienen bajo riesgo?
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 17:06:15 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+
+# Assuming dfs is already declared and contains the DataFrame
+# Concatenate all DataFrames in the list if there are multiple DataFrames
+df = pd.concat(dfs, ignore_index=True)
+
+# Count the number of users with "Bajo riesgo"
+bajo_riesgo_count = df[df['risk_group'] == 'Bajo riesgo'].shape[0]
+
+# Declare result var: 
+result = {
+    "type": "number",
+    "value": bajo_riesgo_count
+}
+            ```
+            
+2025-08-04 17:06:15 [INFO] Executing Step 4: CachePopulation
+2025-08-04 17:06:15 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 17:06:15 [INFO] 
+Code running:
+```
+df = pd.concat(dfs, ignore_index=True)
+bajo_riesgo_count = df[df['risk_group'] == 'Bajo riesgo'].shape[0]
+result = {'type': 'number', 'value': bajo_riesgo_count}
+        ```
+2025-08-04 17:06:15 [INFO] Executing Step 6: CodeExecution
+2025-08-04 17:06:15 [INFO] Executing Step 7: ResultValidation
+2025-08-04 17:06:15 [INFO] Answer: {'type': 'number', 'value': 14022}
+2025-08-04 17:06:15 [INFO] Executing Step 8: ResultParsing
+2025-08-04 17:13:13 [INFO] Question: hola como estas
+2025-08-04 17:13:13 [INFO] Running PandasAI with openai LLM...
+2025-08-04 17:13:13 [INFO] Prompt ID: b11fc590-2723-46dc-a1af-dbd94dbd372c
+2025-08-04 17:13:13 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 17:13:13 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 17:13:13 [INFO] Executing Step 1: CacheLookup
+2025-08-04 17:13:13 [INFO] Using cached response
+2025-08-04 17:13:13 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 17:13:13 [INFO] Executing Step 2: Skipping...
+2025-08-04 17:13:13 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 17:13:13 [INFO] Executing Step 3: Skipping...
+2025-08-04 17:13:13 [INFO] Executing Step 4: CachePopulation
+2025-08-04 17:13:13 [INFO] Executing Step 4: Skipping...
+2025-08-04 17:13:13 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 17:13:13 [INFO] Saving charts to /home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png
+2025-08-04 17:13:13 [INFO] 
+Code running:
+```
+data = {'user_id': ['16136_204.0_185.0_138.0_visa_debit_nan_nan_gmail.com_gmail.com_159996.0_0.0_0.0_Found_nan_chrome', '3154_408.0_185.0_224.0_mastercard_debit_nan_nan_live.com.mx_live.com.mx_253999.0_0.0_0.0_New_nan_chrome', '3957_233.0_150.0_162.0_visa_credit_441.0_nan_gmail.com_hotmail.com_94171.0_1.0_0.0_Found_iOS 10.3.3_mobile safari generic'], 'fraud_score': [63.0, 13.655, 4.433], 'risk_group': ['Bajo riesgo', 'Riesgo alto', 'Fraude'], 'TransactionAmt': [159996.0, 253999.0, 94171.0], 'service_assignment': ['Paquete de Servicios completo', 'Sin Paquete de Servicios', 'Paquete de Servicios medio']}
+average_fraud_score = dfs[0].groupby('risk_group')['fraud_score'].mean().reset_index()
+plt.figure(figsize=(8, 5))
+plt.bar(average_fraud_score['risk_group'], average_fraud_score['fraud_score'], color='skyblue')
+plt.title('Average Fraud Score by Risk Group')
+plt.xlabel('Risk Group')
+plt.ylabel('Average Fraud Score')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig('/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png')
+result = {'type': 'plot', 'value': '/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png'}
+        ```
+2025-08-04 17:13:13 [INFO] Executing Step 6: CodeExecution
+2025-08-04 17:13:13 [INFO] Executing Step 7: ResultValidation
+2025-08-04 17:13:13 [INFO] Answer: {'type': 'plot', 'value': '/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png'}
+2025-08-04 17:13:13 [INFO] Executing Step 8: ResultParsing
+2025-08-04 17:13:25 [INFO] Question: hola como estas
+2025-08-04 17:13:25 [INFO] Running PandasAI with openai LLM...
+2025-08-04 17:13:25 [INFO] Prompt ID: 70f62123-ca1a-452e-9380-19dada359b31
+2025-08-04 17:13:25 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 17:13:25 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 17:13:25 [INFO] Executing Step 1: CacheLookup
+2025-08-04 17:13:25 [INFO] Using cached response
+2025-08-04 17:13:25 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 17:13:25 [INFO] Executing Step 2: Skipping...
+2025-08-04 17:13:25 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 17:13:25 [INFO] Executing Step 3: Skipping...
+2025-08-04 17:13:25 [INFO] Executing Step 4: CachePopulation
+2025-08-04 17:13:25 [INFO] Executing Step 4: Skipping...
+2025-08-04 17:13:25 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 17:13:25 [INFO] Saving charts to /home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png
+2025-08-04 17:13:25 [INFO] 
+Code running:
+```
+data = {'user_id': ['16136_204.0_185.0_138.0_visa_debit_nan_nan_gmail.com_gmail.com_159996.0_0.0_0.0_Found_nan_chrome', '3154_408.0_185.0_224.0_mastercard_debit_nan_nan_live.com.mx_live.com.mx_253999.0_0.0_0.0_New_nan_chrome', '3957_233.0_150.0_162.0_visa_credit_441.0_nan_gmail.com_hotmail.com_94171.0_1.0_0.0_Found_iOS 10.3.3_mobile safari generic'], 'fraud_score': [63.0, 13.655, 4.433], 'risk_group': ['Bajo riesgo', 'Riesgo alto', 'Fraude'], 'TransactionAmt': [159996.0, 253999.0, 94171.0], 'service_assignment': ['Paquete de Servicios completo', 'Sin Paquete de Servicios', 'Paquete de Servicios medio']}
+average_fraud_score = dfs[0].groupby('risk_group')['fraud_score'].mean().reset_index()
+plt.figure(figsize=(8, 5))
+plt.bar(average_fraud_score['risk_group'], average_fraud_score['fraud_score'], color='skyblue')
+plt.title('Average Fraud Score by Risk Group')
+plt.xlabel('Risk Group')
+plt.ylabel('Average Fraud Score')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig('/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png')
+result = {'type': 'plot', 'value': '/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png'}
+        ```
+2025-08-04 17:13:25 [INFO] Executing Step 6: CodeExecution
+2025-08-04 17:13:25 [INFO] Executing Step 7: ResultValidation
+2025-08-04 17:13:25 [INFO] Answer: {'type': 'plot', 'value': '/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png'}
+2025-08-04 17:13:25 [INFO] Executing Step 8: ResultParsing
+2025-08-04 17:13:44 [INFO] Question: hola que tal
+2025-08-04 17:13:44 [INFO] Running PandasAI with openai LLM...
+2025-08-04 17:13:44 [INFO] Prompt ID: 99ce9696-a990-4f05-bb84-b64f561eeb5a
+2025-08-04 17:13:44 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-08-04 17:13:44 [INFO] Executing Step 0: ValidatePipelineInput
+2025-08-04 17:13:44 [INFO] Executing Step 1: CacheLookup
+2025-08-04 17:13:44 [INFO] Executing Step 2: PromptGeneration
+2025-08-04 17:13:44 [INFO] Using prompt: <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+15063_514.0_150.0_226.0_visa_credit_299.0_nan_yahoo.com_hotmail.com_87802.0_0.0_0.0_New_iOS 11.2.1_mobile safari 11.0_iOS Device,0.062794946,Riesgo alto,27.85,Paquete de Servicios medio
+4425_562.0_150.0_197.0_mastercard_credit_441.0_nan_gmail.com_gmail.com_199868.0_0.0_0.0_New_iOS 11.2.6_mobile safari generic_iOS Device,0.0009794805,Riesgo medio,30.265,Paquete de Servicios completo
+12544_321.0_150.0_226.0_visa_debit_337.0_nan_gmail.com_gmail.com_28653.0_0.0_0.0_Found_Windows 10_chrome 63.0_Windows,0.08521887,Fraude,8.238,Sin Paquete de Servicios
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ hola que tal
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-08-04 17:13:44 [INFO] Executing Step 3: CodeGenerator
+2025-08-04 17:13:54 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-04 17:13:54 [INFO] Prompt used:
+            <dataframe>
+dfs[0]:15195x5
+user_id,fraud_score,risk_group,TransactionAmt,service_assignment
+15063_514.0_150.0_226.0_visa_credit_299.0_nan_yahoo.com_hotmail.com_87802.0_0.0_0.0_New_iOS 11.2.1_mobile safari 11.0_iOS Device,0.062794946,Riesgo alto,27.85,Paquete de Servicios medio
+4425_562.0_150.0_197.0_mastercard_credit_441.0_nan_gmail.com_gmail.com_199868.0_0.0_0.0_New_iOS 11.2.6_mobile safari generic_iOS Device,0.0009794805,Riesgo medio,30.265,Paquete de Servicios completo
+12544_321.0_150.0_226.0_visa_debit_337.0_nan_gmail.com_gmail.com_28653.0_0.0_0.0_Found_Windows 10_chrome 63.0_Windows,0.08521887,Fraude,8.238,Sin Paquete de Servicios
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ hola que tal
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-08-04 17:13:54 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Assuming dfs is already declared and contains the DataFrame
+# For demonstration, let's create the DataFrame from the provided data
+data = {
+    "user_id": [
+        "15063_514.0_150.0_226.0_visa_credit_299.0_nan_yahoo.com_hotmail.com_87802.0_0.0_0.0_New_iOS 11.2.1_mobile safari 11.0_iOS Device",
+        "4425_562.0_150.0_197.0_mastercard_credit_441.0_nan_gmail.com_gmail.com_199868.0_0.0_0.0_New_iOS 11.2.6_mobile safari generic_iOS Device",
+        "12544_321.0_150.0_226.0_visa_debit_337.0_nan_gmail.com_gmail.com_28653.0_0.0_0.0_Found_Windows 10_chrome 63.0_Windows"
+    ],
+    "fraud_score": [0.062794946, 0.0009794805, 0.08521887],
+    "risk_group": ["Riesgo alto", "Riesgo medio", "Fraude"],
+    "TransactionAmt": [27.85, 30.265, 8.238],
+    "service_assignment": ["Paquete de Servicios medio", "Paquete de Servicios completo", "Sin Paquete de Servicios"]
+}
+
+dfs = [pd.DataFrame(data)]
+
+# Example analysis: Calculate average transaction amount by risk group
+avg_transaction_by_risk = dfs[0].groupby('risk_group')['TransactionAmt'].mean().reset_index()
+
+# Plotting the average transaction amount by risk group
+plt.figure(figsize=(8, 5))
+plt.bar(avg_transaction_by_risk['risk_group'], avg_transaction_by_risk['TransactionAmt'], color='skyblue')
+plt.title('Average Transaction Amount by Risk Group')
+plt.xlabel('Risk Group')
+plt.ylabel('Average Transaction Amount')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig('avg_transaction_by_risk_group.png')
+
+# Declare result var: 
+result = {
+    "type": "plot",
+    "value": "avg_transaction_by_risk_group.png"
+}
+            ```
+            
+2025-08-04 17:13:54 [INFO] Executing Step 4: CachePopulation
+2025-08-04 17:13:54 [INFO] Executing Step 5: CodeCleaning
+2025-08-04 17:13:54 [INFO] Saving charts to /home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png
+2025-08-04 17:13:54 [INFO] 
+Code running:
+```
+data = {'user_id': ['15063_514.0_150.0_226.0_visa_credit_299.0_nan_yahoo.com_hotmail.com_87802.0_0.0_0.0_New_iOS 11.2.1_mobile safari 11.0_iOS Device', '4425_562.0_150.0_197.0_mastercard_credit_441.0_nan_gmail.com_gmail.com_199868.0_0.0_0.0_New_iOS 11.2.6_mobile safari generic_iOS Device', '12544_321.0_150.0_226.0_visa_debit_337.0_nan_gmail.com_gmail.com_28653.0_0.0_0.0_Found_Windows 10_chrome 63.0_Windows'], 'fraud_score': [0.062794946, 0.0009794805, 0.08521887], 'risk_group': ['Riesgo alto', 'Riesgo medio', 'Fraude'], 'TransactionAmt': [27.85, 30.265, 8.238], 'service_assignment': ['Paquete de Servicios medio', 'Paquete de Servicios completo', 'Sin Paquete de Servicios']}
+avg_transaction_by_risk = dfs[0].groupby('risk_group')['TransactionAmt'].mean().reset_index()
+plt.figure(figsize=(8, 5))
+plt.bar(avg_transaction_by_risk['risk_group'], avg_transaction_by_risk['TransactionAmt'], color='skyblue')
+plt.title('Average Transaction Amount by Risk Group')
+plt.xlabel('Risk Group')
+plt.ylabel('Average Transaction Amount')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig('/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png')
+result = {'type': 'plot', 'value': '/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png'}
+        ```
+2025-08-04 17:13:54 [INFO] Executing Step 6: CodeExecution
+2025-08-04 17:13:54 [INFO] Executing Step 7: ResultValidation
+2025-08-04 17:13:54 [INFO] Answer: {'type': 'plot', 'value': '/home/renzovf/code/MarcosMoyanoT/project_final/exports/charts/temp_chart.png'}
+2025-08-04 17:13:54 [INFO] Executing Step 8: ResultParsing
