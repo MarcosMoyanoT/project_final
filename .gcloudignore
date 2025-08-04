@@ -1,0 +1,9 @@
+# Ignorar directorios y archivos de datos
+raw_data/
+__pycache__/
+*.pyc
+
+# Ignorar directorios de entorno virtual
+.venv/
+env/
+venv/

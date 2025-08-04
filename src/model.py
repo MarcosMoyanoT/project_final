@@ -8,39 +8,71 @@ import numpy as np
 import os
 import fsspec
 
+def find_optimal_threshold(y_true, y_probs, metric='f1'):
+    """
+    Encuentra el mejor threshold según la métrica (default: F1-score)
+    """
+    thresholds = np.linspace(0.1, 0.9, 100)
+    scores = []
 
+    for thresh in thresholds:
+        y_pred = (y_probs >= thresh).astype(int)
+        if metric == 'f1':
+            score = f1_score(y_true, y_pred)
+        elif metric == 'precision':
+            score = precision_score(y_true, y_pred)
+        elif metric == 'recall':
+            score = recall_score(y_true, y_pred)
+        else:
+            raise ValueError("Metric must be 'f1', 'precision' or 'recall'")
+        scores.append(score)
 
-def train_xgb_model(X_train, y_train, params=None):
+    best_idx = np.argmax(scores)
+    return thresholds[best_idx]
+
+def train_xgb_model(X_train, y_train, X_val, y_val):
     """
     Entrena un modelo XGBoost con los parámetros especificados o por defecto.
     """
     default_params = {
-        "n_estimators": 400,
-        "max_depth": 10,
-        "learning_rate": 0.2,
-        "subsample": 0.8,
-        "colsample_bytree": 1.0,
-        "gamma": 0,
-        "use_label_encoder": False,
-        "eval_metric": "logloss",
-        "random_state": 42,
-        "n_jobs": -1
+    "n_estimators": 443,
+    "max_depth": 7,
+    "min_child_weight": 5,
+    "gamma": 0.07695212100160928,
+    "subsample": 0.865237466656049,
+    "colsample_bytree": 0.7377072170135907,
+    "reg_alpha": 0.8922143189961961,
+    "reg_lambda": 0.9920686938647577,
+    "learning_rate": 0.15753081640792435,
+    "eval_metric": "logloss",
+    "random_state": 42,
+    "n_jobs": -1,
     }
-
-    if params:
-        default_params.update(params)
 
     model = XGBClassifier(**default_params)
     model.fit(X_train, y_train)
-    return model
+    # Calculamos el umbral con los datos de validación
+    y_proba_val = model.predict_proba(X_val)[:, 1]
+    optimal_threshold = find_optimal_threshold(y_val, y_proba_val)
+
+    return model, optimal_threshold
 
 
-def predict(model, X, threshold=0.5):
+def predict(model, X_data, threshold):
     """
-    Realiza predicciones con un modelo entrenado y un threshold dado.
+    Realiza predicciones binarias utilizando un umbral dado.
+
+    Args:
+        model: El modelo entrenado.
+        X_data (pd.DataFrame): Los datos de entrada (features).
+        threshold (float): El umbral para clasificar las predicciones.
+
+    Returns:
+        np.array: Un array de predicciones binarias (0 o 1).
     """
-    y_proba = model.predict_proba(X)[:, 1]
-    return (y_proba >= threshold).astype(int), y_proba
+    y_proba = model.predict_proba(X_data)[:, 1]
+    y_pred = (y_proba >= threshold).astype(int)
+    return y_pred
 
 
 import pandas as pd

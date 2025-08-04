@@ -4,3 +4,9 @@ xgboost
 imbalanced-learn
 joblib
 matplotlib
+fsspec
+fastapi
+uvicorn
+pydantic
+imbalanced-learn
+gcsfs # gcsfs es la dependencia de fsspec para GCS

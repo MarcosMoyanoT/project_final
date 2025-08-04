@@ -1,17 +1,41 @@
 # train.py
-
-from src.data import load_preprocess_data
-from src.preprocessing import encode_and_scale, split_data, balance_data
-from src.model import train_xgb_model, predict, evaluate_model, save_model, assign_groups_and_services_from_proba
+import pandas as pd
+from src.data import load_preprocess_data, calculate_service_fraud_metrics_gcs
+from src.preprocessing import (
+    encode_and_scale,
+    split_data,
+    balance_data,
+    save_preprocessors
+)
+from src.model import train_xgb_model, predict, evaluate_model, save_model, assign_groups_and_services_from_proba, find_optimal_threshold
 from imblearn.combine import SMOTETomek
 
 
 def main():
-    # 1. Cargar datos
+    # -------------------------------------------------------------------------
+    # COMPONENTE DE NEGOCIO (ANÁLISIS DE RIESGO DE SERVICIOS)
+    # -------------------------------------------------------------------------
+    gcs_services_path = "gs://fraud-detection-lewagon"
+    df_service_metrics = calculate_service_fraud_metrics_gcs(base_path=gcs_services_path)
+    print("---------------------------------------------------------------")
+    print("📊 ANÁLISIS DE RIESGO DE SERVICIOS FINANCIEROS:")
+    print("---------------------------------------------------------------")
+    print(df_service_metrics)
+
+    # -------------------------------------------------------------------------
+    # COMPONENTE ML (PREDICCIÓN DE FRAUDE DE TRANSACCIÓN)
+    # -------------------------------------------------------------------------
+    print("\n---------------------------------------------------------------")
+    print("🧠 ENTRENAMIENTO DEL MODELO ML PARA DETECCIÓN DE FRAUDE")
+    print("---------------------------------------------------------------")
+
+    # 1. Cargar datos de entrenamiento desde GCS
+    # Añadimos `nrows=50000` para cargar solo 50,000 filas.
     df = load_preprocess_data(
         identity_path="gs://fraud-detection-lewagon/train_identity.csv",
         transaction_path="gs://fraud-detection-lewagon/train_transaction.csv",
-        null_threshold=0.4
+        null_threshold=0.4,
+        nrows=30000
     )
     print(f"Datos cargados y preprocesados. Shape: {df.shape}")
 
@@ -25,11 +49,11 @@ def main():
     ]
 
     # 2. Preprocesamiento (encoding y escalado)
-    X, y = encode_and_scale(df, categorical_columns=categorical_columns, target_column='isFraud')
-    print(f"Preprocesamiento completo. X shape: {X.shape}, y shape: {y.shape}")
+    df_encoded, preprocessors = encode_and_scale(df, categorical_columns=categorical_columns, target_column='isFraud')
+    print(f"Preprocesamiento completo. X shape: {df_encoded.shape}")
 
     # 3. División en train/val
-    X_train, X_val, y_train, y_val = split_data(df=df, target_column='isFraud')
+    X_train, X_val, y_train, y_val = split_data(df=df_encoded, target_column='isFraud')
 
     # 4. Balanceo de clases
     X_train_resampled, y_train_resampled = balance_data(X_train, y_train)
@@ -37,24 +61,24 @@ def main():
 
     # 5. Entrenar modelo y buscar mejor threshold
     model, threshold = train_xgb_model(X_train_resampled, y_train_resampled, X_val, y_val)
-    print(f"Modelo entrenado. Threshold óptimo: {threshold:.2f}")
+    print(f"Threshold óptimo: {threshold:.2f}")
 
     # 6. Predecir con threshold ajustado
     y_pred = predict(model, X_val, threshold)
 
     # 7. Evaluar modelo
-    evaluate_model(y_val, y_pred, model.predict_proba(X_val)[:, 1])
-
-    # 8. Asignar grupos de fraude y paquetes financieros
     y_proba = model.predict_proba(X_val)[:, 1]
-    user_ids = X_val.index  # Si tu index es el user_id
-    grupos_df = assign_groups_and_services_from_proba(y_proba, user_ids=user_ids)
+    evaluate_model(y_val, y_pred, y_proba)
 
+    # 8. Asignar grupos de fraude y paquetes financieros (con umbrales fijos)
+    user_ids = X_val.index
+    grupos_df = assign_groups_and_services_from_proba(y_proba=y_proba, user_ids=user_ids)
     print("\n📊 Distribución de paquetes financieros asignados:")
+    print(grupos_df["paquete_servicio"].value_counts())
 
-    # 8. Guardar modelo
-    # Guardar en GCS
+    # 9. Guardar modelo y preprocesadores
     save_model(model, "gs://fraud-detection-lewagon/models/xgb_model.joblib")
+    save_preprocessors(preprocessors, "gs://fraud-detection-lewagon/models/preprocessors.joblib")
 
 
 if __name__ == "__main__":
