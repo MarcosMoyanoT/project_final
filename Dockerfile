@@ -1,25 +1,21 @@
-# Usamos una imagen base oficial de Python para tu proyecto
-FROM python:3.9-slim
+FROM python:3.10-slim
 
-# Establecemos el directorio de trabajo dentro del contenedor
+# The WORKDIR is correct. It creates a folder named 'app'
+# and all subsequent commands will run from inside this folder.
 WORKDIR /app
 
-# Copiamos solo el archivo requirements.txt primero para aprovechar el cache de Docker
+# Copy and install dependencies first for better caching.
 COPY requirements.txt .
-
-# Instalamos las dependencias
-# El comando --no-cache-dir y --upgrade son buenas prácticas
-RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
+# Install gunicorn for the production server
+RUN pip install gunicorn
 
-# Copiamos el resto de los archivos de tu proyecto
+# Copy all project files into the /app directory
 COPY . .
 
-# Exponemos el puerto en el que correrá la aplicación (Cloud Run usará esto)
+# Expose the port that the container will listen on.
 EXPOSE 8080
 
-# Comando para iniciar el servidor de la API con Uvicorn
-# El "app:app" significa que busque la instancia "app" dentro del archivo "app.py"
-# --host 0.0.0.0 le dice al servidor que escuche en todas las interfaces de red disponibles
-# --port $PORT le indica que use el puerto asignado por Cloud Run
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
+# This is the command that starts the web server.
+# It tells gunicorn to run the 'app' object found in the 'api' module.
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "api:app"]
