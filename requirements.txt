@@ -6,8 +6,8 @@ google-cloud-storage
 imbalanced-learn
 joblib
 matplotlib
-numpy>=1.25
-pandas>=2.2.3
+numpy==1.24.4
+pandas==1.5.3
 pandasai==2.3.2
 pydantic
 scikit-learn
@@ -19,3 +19,4 @@ tqdm
 requests
 openai
 python-dotenv
+streamlit
