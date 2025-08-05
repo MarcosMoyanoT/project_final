@@ -86,22 +86,22 @@ if st.session_state.df_scores is not None:
             return "Fraude"
 
     if 'TransactionAmt' in st.session_state.df_scores.columns:
-        df_display = st.session_state.df_scores.copy()
-        df_display["risk_group"] = df_display["fraud_score"].apply(assign_risk_group)
-        df_display["estimated_cost"] = df_display["TransactionAmt"] * df_display["fraud_score"]
-        df_display['fraud_score_baseline'] = 0.08
-        df_display['estimated_cost_baseline'] = df_display['TransactionAmt'] * df_display['fraud_score_baseline']
-        Costo_total_fraude_con_modelo = df_display['estimated_cost'].sum()
-        Costo_total_fraude_sin_modelo = df_display['estimated_cost_baseline'].sum()
+        st.session_state.df_display = st.session_state.df_scores.copy()
+        st.session_state.df_display["risk_group"] = st.session_state.df_display["fraud_score"].apply(assign_risk_group)
+        st.session_state.df_display["estimated_cost"] = st.session_state.df_display["TransactionAmt"] * st.session_state.df_display["fraud_score"]
+        st.session_state.df_display['fraud_score_baseline'] = 0.08
+        st.session_state.df_display['estimated_cost_baseline'] = st.session_state.df_display['TransactionAmt'] * st.session_state.df_display['fraud_score_baseline']
+        Costo_total_fraude_con_modelo = st.session_state.df_display['estimated_cost'].sum()
+        Costo_total_fraude_sin_modelo = st.session_state.df_display['estimated_cost_baseline'].sum()
         ahorro_total = Costo_total_fraude_sin_modelo - Costo_total_fraude_con_modelo
         porcentaje_ahorro = ahorro_total / Costo_total_fraude_sin_modelo if Costo_total_fraude_sin_modelo > 0 else 0
-        Monto_total_movimiento = df_display['TransactionAmt'].sum()
+        Monto_total_movimiento = st.session_state.df_display['TransactionAmt'].sum()
 
         st.title("Resultados de la Predicción y Análisis de Costos")
         col1, col2 = st.columns(2)
         with col1:
             st.subheader("Distribución de Riesgo por Modelo")
-            st.bar_chart(df_display["risk_group"].value_counts())
+            st.bar_chart(st.session_state.df_display["risk_group"].value_counts())
         with col2:
             st.subheader("Métricas del modelo")
             st.metric("Costo con modelo (USD)", f"${Costo_total_fraude_con_modelo:,.2f}")
@@ -109,9 +109,9 @@ if st.session_state.df_scores is not None:
             st.metric("Ahorro estimado (USD)", f"${ahorro_total:,.2f}")
             st.metric("Porcentaje de ahorro", f"{porcentaje_ahorro:.2%}")
         st.markdown("### Vista previa de asignaciones y costos")
-        st.dataframe(df_display.head(20))
+        st.dataframe(st.session_state.df_display.head(20))
         st.markdown("### Costos estimados por grupo de riesgo")
-        st.table(df_display.groupby("risk_group")["estimated_cost"].sum().reset_index())
+        st.table(st.session_state.df_display.groupby("risk_group")["estimated_cost"].sum().reset_index())
 
         # ---------- AGENTE CFO INTELIGENTE CON CHAT ----------
         st.markdown("## 🤖 Agente AI")
@@ -132,18 +132,17 @@ if st.session_state.df_scores is not None:
                 with st.chat_message("assistant"):
                     with st.spinner("Pensando..."):
                         llm_pandasai = OpenAI(api_token=OPENAI_API_KEY)
-                        smart_df = SmartDataframe(st.session_state.df_scores, config={"llm": llm_pandasai})
+                        smart_df = SmartDataframe(st.session_state.df_display, config={"llm": llm_pandasai})
 
                         if user_query.lower() in ["hola", "hola como estas?", "saludos", "que tal?","buenas","quien eres?","como puedes ayudarme?"]:
                             response = "¡Hola! Soy tu agente financiero. Hazme consultas sobre los datos cargados y/o outputs generados"
-                            try:
-                                response = smart_df.chat(user_query)
-                            except Exception as e:
-                                response = f"Lo siento, ocurrió un error al procesar tu pregunta. Error: {e}"
-
+                        try:
+                            response = smart_df.chat(user_query)
+                        except Exception as e:
+                            response = f"Lo siento, ocurrió un error al procesar tu pregunta. Error: {e}"
                         st.markdown(response)
                         st.session_state.messages.append({"role": "assistant", "content": response})
-
+                st.markdown(st.session_state.messages)
     else:
         st.warning("La columna 'TransactionAmt' no se encontró en los datos cargados. Necesaria para el cálculo de costos.")
 
