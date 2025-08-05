@@ -10,11 +10,10 @@ pydantic
 gcsfs
 Flask
 google-cloud-storage
-numpy # Permitir que pip instale la versión más reciente compatible con Python 3.13
-pandas # Permitir que pip instale la versión más reciente compatible con Python 3.13
-pandasai==2.10.0 # Usar una versión de pandasai compatible con pandas>=2.0.0
+numpy 
+pandas 
 python-dotenv
 streamlit
 plotly
 requests
-openai
+openai 
