@@ -386,7 +386,7 @@ if st.session_state.df_scores is not None:
 
                                 # Ejecutar el código generado
                                 # Creamos un entorno de ejecución seguro
-                                local_vars = {'df': st.session_state.df_scores, 'pd': pd}
+                                local_vars = {'df': st.session_state.df_display, 'pd': pd}
                                 output_buffer = io.StringIO()
                                 try:
                                     # Redirigir la salida estándar para capturar el print
