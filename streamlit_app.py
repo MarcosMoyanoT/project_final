@@ -4,63 +4,67 @@ import requests
 import io
 import json
 import os
-# import openai
-# from pandasai import SmartDataframe
-# from pandasai.llm.openai import OpenAI
+from dotenv import load_dotenv
+from pandasai import SmartDataframe
+from pandasai.llm.openai import OpenAI
+
+# Cargar variables de entorno al inicio
+load_dotenv()
 
 # ---------- CONFIGURACIÓN DE PÁGINA Y API ----------
 st.set_page_config(page_title="Simulador de Fraude + CFO IA", layout="wide")
 
-API_URL = "https://fraud-detector-api-567985136734.us-central1.run.app"
+# Inicializar st.session_state
+if 'df_scores' not in st.session_state:
+    st.session_state.df_scores = None
+if 'messages' not in st.session_state:
+    st.session_state.messages = []
+
 # ---------- CARGA DE DATOS Y LÓGICA DE PREDICCIÓN ----------
 st.title("Sistema de Detección de Fraude")
-st.markdown("Carga tus archivos `train_transaction.csv` y `train_identity.csv` para obtener predicciones.")
+st.markdown("Carga tus archivos `transaction.csv` y `identity.csv` para obtener predicciones.")
 
 # Widgets para subir archivos
-uploaded_transaction_file = st.file_uploader("Elige el archivo de Transacciones (train_transaction.csv)", type="csv")
-uploaded_identity_file = st.file_uploader("Elige el archivo de Identidad (train_identity.csv)", type="csv")
-
-df_scores = None # Inicializamos df_scores como None
+uploaded_transaction_file = st.file_uploader("Elige el archivo de Transacciones (transaction.csv)", type="csv")
+uploaded_identity_file = st.file_uploader("Elige el archivo de Identidad (identity.csv)", type="csv")
 
 if uploaded_transaction_file and uploaded_identity_file:
-    try:
-        # Leer y fusionar los DataFrames
-        df_transactions = pd.read_csv(uploaded_transaction_file)
-        df_identity = pd.read_csv(uploaded_identity_file)
+    if st.session_state.df_scores is None or \
+       (uploaded_transaction_file.name, uploaded_identity_file.name) != \
+       (st.session_state.get('last_trans_file_name'), st.session_state.get('last_id_file_name')):
 
-        # Usar un merge para combinar los datos de transacción e identidad
-        # Se asume que la columna para hacer el merge es 'TransactionID'
-        df_raw_input = pd.merge(df_transactions, df_identity, on='TransactionID', how='left')
-        st.success("Archivos cargados y fusionados correctamente.")
+        try:
+            df_transactions = pd.read_csv(uploaded_transaction_file)
+            df_identity = pd.read_csv(uploaded_identity_file)
+            df_raw_input = pd.merge(df_transactions, df_identity, on='TransactionID', how='left')
+            st.success("Archivos cargados y fusionados correctamente.")
 
-        # Convertir el DataFrame a un formato JSON para la API
-        json_data = df_raw_input.to_json(orient='records')
+            json_data = df_raw_input.to_json(orient='records')
+            st.info("Enviando datos a la API para predicción...")
+            headers = {'Content-Type': 'application/json'}
+            API_URL = "https://fraud-detector-api-567985136734.us-central1.run.app"
+            response = requests.post(API_URL, data=json_data, headers=headers)
 
-        # Realizar la llamada a la API
-        st.info("Enviando datos a la API para predicción...")
-        headers = {'Content-Type': 'application/json'}
-        response = requests.post(API_URL, data=json_data, headers=headers)
+            if response.status_code == 200:
+                predictions = response.json()
+                st.success("Predicciones recibidas de la API.")
+                df_predictions = pd.DataFrame(predictions)
+                st.session_state.df_scores = df_raw_input.copy()
+                st.session_state.df_scores['fraud_score'] = df_predictions['prediction']
+                st.session_state.last_trans_file_name = uploaded_transaction_file.name
+                st.session_state.last_id_file_name = uploaded_identity_file.name
 
-        if response.status_code == 200:
-            predictions = response.json()
-            st.success("Predicciones recibidas de la API.")
+            else:
+                st.error(f"Error al conectar con la API. Código de estado: {response.status_code}")
+                st.json(response.json())
+                st.session_state.df_scores = None
 
-            # Agregar los resultados de la API a un DataFrame
-            df_predictions = pd.DataFrame(predictions)
-
-            # Combina el DataFrame original con las predicciones
-            df_scores = df_raw_input.copy()
-            df_scores['fraud_score'] = df_predictions['prediction']
-
-        else:
-            st.error(f"Error al conectar con la API. Código de estado: {response.status_code}")
-            st.json(response.json())
-
-    except Exception as e:
-        st.error(f"Ocurrió un error: {e}")
+        except Exception as e:
+            st.error(f"Ocurrió un error: {e}")
+            st.session_state.df_scores = None
 
 # ---------- LÓGICA DEL SIMULADOR DE COSTOS (solo se ejecuta si hay datos) ----------
-if df_scores is not None:
+if st.session_state.df_scores is not None:
     st.sidebar.header("Ajustá los umbrales de riesgo:")
     low_risk_threshold = st.sidebar.slider("Máximo score para Bajo riesgo", 0.0, 1.0, 0.3, 0.01)
     medium_risk_threshold = st.sidebar.slider("Máximo score para Riesgo medio", low_risk_threshold, 1.0, 0.6, 0.01)
@@ -71,7 +75,6 @@ if df_scores is not None:
     cost_medio = st.sidebar.number_input("Costo % - Préstamos", 0.0, 1.0, 0.01, 0.001)
     cost_simple = st.sidebar.number_input("Costo % - Transacciones", 0.0, 1.0, 0.003, 0.001)
 
-    # --- Funciones de asignación de riesgo ---
     def assign_risk_group(score):
         if score < low_risk_threshold:
             return "Bajo riesgo"
@@ -82,64 +85,67 @@ if df_scores is not None:
         else:
             return "Fraude"
 
-    # Se asume que tienes las columnas 'TransactionAmt' para los cálculos
-    df_scores["risk_group"] = df_scores["fraud_score"].apply(assign_risk_group)
+    if 'TransactionAmt' in st.session_state.df_scores.columns:
+        df_display = st.session_state.df_scores.copy()
+        df_display["risk_group"] = df_display["fraud_score"].apply(assign_risk_group)
+        df_display["estimated_cost"] = df_display["TransactionAmt"] * df_display["fraud_score"]
+        df_display['fraud_score_baseline'] = 0.08
+        df_display['estimated_cost_baseline'] = df_display['TransactionAmt'] * df_display['fraud_score_baseline']
+        Costo_total_fraude_con_modelo = df_display['estimated_cost'].sum()
+        Costo_total_fraude_sin_modelo = df_display['estimated_cost_baseline'].sum()
+        ahorro_total = Costo_total_fraude_sin_modelo - Costo_total_fraude_con_modelo
+        porcentaje_ahorro = ahorro_total / Costo_total_fraude_sin_modelo if Costo_total_fraude_sin_modelo > 0 else 0
+        Monto_total_movimiento = df_display['TransactionAmt'].sum()
 
-    # --- ANÁLISIS y COSTOS ---
-    # Asumo que la columna de monto es 'TransactionAmt'
-    df_scores["estimated_cost"] = df_scores["TransactionAmt"] * df_scores["fraud_score"]
+        st.title("Resultados de la Predicción y Análisis de Costos")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.subheader("Distribución de Riesgo por Modelo")
+            st.bar_chart(df_display["risk_group"].value_counts())
+        with col2:
+            st.subheader("Métricas del modelo")
+            st.metric("Costo con modelo (USD)", f"${Costo_total_fraude_con_modelo:,.2f}")
+            st.metric("Costo sin modelo (USD)", f"${Costo_total_fraude_sin_modelo:,.2f}")
+            st.metric("Ahorro estimado (USD)", f"${ahorro_total:,.2f}")
+            st.metric("Porcentaje de ahorro", f"{porcentaje_ahorro:.2%}")
+        st.markdown("### Vista previa de asignaciones y costos")
+        st.dataframe(df_display.head(20))
+        st.markdown("### Costos estimados por grupo de riesgo")
+        st.table(df_display.groupby("risk_group")["estimated_cost"].sum().reset_index())
 
-    # Costo sin modelo (baseline)
-    df_scores['fraud_score_baseline'] = 0.08
-    df_scores['estimated_cost_baseline'] = df_scores['TransactionAmt'] * df_scores['fraud_score_baseline']
+        # ---------- AGENTE CFO INTELIGENTE CON CHAT ----------
+        st.markdown("## 🤖 Agente AI")
+        OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-    Costo_total_fraude_con_modelo = df_scores['estimated_cost'].sum()
-    Costo_total_fraude_sin_modelo = df_scores['estimated_cost_baseline'].sum()
+        if OPENAI_API_KEY is None:
+            st.error("La variable de entorno OPENAI_API_KEY no está configurada.")
+        else:
+            for message in st.session_state.messages:
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
 
-    ahorro_total = Costo_total_fraude_sin_modelo - Costo_total_fraude_con_modelo
-    porcentaje_ahorro = ahorro_total / Costo_total_fraude_sin_modelo if Costo_total_fraude_sin_modelo > 0 else 0
+            if user_query := st.chat_input("Haz tu pregunta"):
+                st.session_state.messages.append({"role": "user", "content": user_query})
+                with st.chat_message("user"):
+                    st.markdown(user_query)
 
-    Monto_total_movimiento = df_scores['TransactionAmt'].sum()
-    Porcentaje_costo_fraude = Costo_total_fraude_con_modelo / Monto_total_movimiento if Monto_total_movimiento > 0 else 0
+                with st.chat_message("assistant"):
+                    with st.spinner("Pensando..."):
+                        llm_pandasai = OpenAI(api_token=OPENAI_API_KEY)
+                        smart_df = SmartDataframe(st.session_state.df_scores, config={"llm": llm_pandasai})
 
-    # ---------- INTERFAZ STREAMLIT CON VISUALIZACIONES ----------
-    st.title("Resultados de la Predicción y Análisis de Costos")
+                        if user_query.lower() in ["hola", "hola como estas?", "saludos", "que tal?","buenas","quien eres?","como puedes ayudarme?"]:
+                            response = "¡Hola! Soy tu agente financiero. Hazme consultas sobre los datos cargados y/o outputs generados"
+                            try:
+                                response = smart_df.chat(user_query)
+                            except Exception as e:
+                                response = f"Lo siento, ocurrió un error al procesar tu pregunta. Error: {e}"
 
-    col1, col2 = st.columns(2)
-    with col1:
-        st.subheader("Distribución de Riesgo por Modelo")
-        st.bar_chart(df_scores["risk_group"].value_counts())
+                        st.markdown(response)
+                        st.session_state.messages.append({"role": "assistant", "content": response})
 
-    with col2:
-        st.subheader("Métricas del modelo")
-        st.metric("Costo con modelo (USD)", f"${Costo_total_fraude_con_modelo:,.2f}")
-        st.metric("Costo sin modelo (USD)", f"${Costo_total_fraude_sin_modelo:,.2f}")
-        st.metric("Ahorro estimado (USD)", f"${ahorro_total:,.2f}")
-        st.metric("Porcentaje de ahorro", f"{porcentaje_ahorro:.2%}")
+    else:
+        st.warning("La columna 'TransactionAmt' no se encontró en los datos cargados. Necesaria para el cálculo de costos.")
 
-    st.markdown("### Vista previa de asignaciones y costos")
-    st.dataframe(df_scores.head(20))
-
-    st.markdown("### Costos estimados por grupo de riesgo")
-    st.table(df_scores.groupby("risk_group")["estimated_cost"].sum().reset_index())
-
-    # ---------- AGENTE CFO INTELIGENTE (COMENTADO) ----------
-    # st.markdown("## 🤖 Consultá al CFO Asistente (IA)")
-
-    # openai.api_key = os.environ.get("OPENAI_API_KEY")
-    # if openai.api_key is None:
-    #     st.error("La variable de entorno OPENAI_API_KEY no está configurada.")
-    # else:
-    #     llm_pandasai = OpenAI(api_token=openai.api_key)
-    #     smart_df = SmartDataframe(df_scores, config={"llm": llm_pandasai, "verbose": True})
-
-    #     user_query = st.text_input("Hacé tu pregunta financiera sobre los datos (ej: ¿cuánto cuesta el fraude en Bajo riesgo?)")
-
-    #     if user_query:
-    #         try:
-    #             response = smart_df.chat(user_query)
-    #             st.success("Respuesta del CFO (PandasAI):")
-    #             st.write(response)
-    #         except Exception as e:
-    #             st.warning("Falla PandasAI. Asegúrate de que tu query sea sobre los datos.")
-    #             st.write(f"Error: {e}")
+else:
+    st.warning("Primero sube los archivos para activar el agente inteligente y las visualizaciones.")

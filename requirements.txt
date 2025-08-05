@@ -1,10 +1,8 @@
-<<<<<<< HEAD
 numpy==1.24.4
 pandas==1.5.3
 pandasai==2.3.2
 openai
 python-dotenv
-=======
 scikit-learn
 xgboost
 imbalanced-learn
@@ -20,7 +18,3 @@ Flask
 joblib
 google-cloud-storage
 numpy==1.24.4
-pandas==1.5.3
-#pandasai==2.3.2
-#openaipython-dotenv
->>>>>>> b8b2ef3cf8fc0a1e00b67f5379adc3c973d51970
