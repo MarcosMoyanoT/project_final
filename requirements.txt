@@ -13,3 +13,7 @@ pydantic
 scikit-learn
 uvicorn
 xgboost
+plotly
+scipy
+tqdm
+requests
