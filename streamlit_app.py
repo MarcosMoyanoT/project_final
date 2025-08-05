@@ -337,7 +337,7 @@ if st.session_state.df_scores is not None:
         st.plotly_chart(fig_paquete, use_container_width=True)
 
         # ---------- AGENTE CFO INTELIGENTE CON CHAT (CUSTOM) ----------
-        st.markdown("## 🤖 Consultá al CFO Asistente (IA)")
+        st.markdown("## 🤖 Consultá al Asistente (IA)")
 
         if not openai_client_chat:
             st.error("No se pudo inicializar el cliente de OpenAI. Revisa tu API key.")
@@ -361,9 +361,9 @@ if st.session_state.df_scores is not None:
                             # --- Lógica para preguntas de datos (sin PandasAI) ---
                             # Le pedimos a GPT que genere el código Python
                             prompt_for_code = f"""
-                            Eres un asistente experto en análisis de datos. Dada la siguiente pregunta del usuario y un DataFrame de pandas llamado `df` (que está en st.session_state.df_scores), genera el código Python para responder a la pregunta.
+                            Eres un asistente experto en análisis de datos. Dada la siguiente pregunta del usuario y un DataFrame de pandas llamado `df_display` (que está en st.session_state.df_display), genera el código Python para responder a la pregunta.
                             Asegúrate de que el código sea completo y ejecutable. Si la pregunta es sobre "usuarios" o "transacciones", asume que se refiere a filas en el DataFrame.
-                            El DataFrame `df` tiene columnas como: {list(st.session_state.df_scores.columns)}.
+                            El DataFrame `df_display` tiene columnas como: {list(st.session_state.df_display.columns)}.
                             La columna 'risk_group' contiene categorías como 'Bajo riesgo', 'Riesgo medio', 'Riesgo alto', 'Fraude'.
                             La columna 'TransactionAmt' contiene el monto de la transacción.
                             La columna 'fraud_score' es el score de fraude.
