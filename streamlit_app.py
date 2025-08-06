@@ -86,6 +86,12 @@ if uploaded_transaction_file and uploaded_identity_file:
 if st.session_state.df_scores is not None:
     # --- Sidebar para configuración ---
     st.sidebar.header("🎚️ Ajustá los umbrales de riesgo:")
+    st.sidebar.markdown(
+    """      
+    Ajustá los valores para personalizar cómo se clasifica el riesgo de cada usuario según el modelo.
+    """
+    )
+   
     low_risk_threshold = st.sidebar.slider("🟢 Máximo score para Bajo riesgo", 0.0, 1.0, 0.3, 0.01)
     medium_risk_threshold = st.sidebar.slider("🟡 Máximo score para Riesgo medio", low_risk_threshold, 1.0, 0.6, 0.01)
     high_risk_threshold = st.sidebar.slider("🔴 Máximo score para Riesgo alto", medium_risk_threshold, 1.0, 0.9, 0.01)
