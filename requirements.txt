@@ -4,15 +4,16 @@ imbalanced-learn
 joblib
 matplotlib
 fsspec
+gcsfs  # dependencia de fsspec para GCS
 fastapi
 uvicorn
 pydantic
-imbalanced-learn
-gcsfs # gcsfs es la dependencia de fsspec para GCS
 Flask
-joblib
 google-cloud-storage
 numpy==1.24.4
 pandas==1.5.3
-#pandasai==2.3.2
-#openaipython-dotenv
+python-dotenv
+streamlit
+plotly
+requests
+openai  # Asegúrate de que esta línea esté presente

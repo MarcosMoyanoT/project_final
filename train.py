@@ -39,6 +39,12 @@ def main():
     )
     print(f"Datos cargados y preprocesados. Shape: {df.shape}")
 
+    # --- AÑADE ESTA LÍNEA AQUÍ ---
+    if 'TransactionID' in df.columns:
+        df = df.drop(columns=['TransactionID'])
+        print("DEBUG: 'TransactionID' eliminado del DataFrame para entrenamiento.")
+    # -----------------------------
+
     categorical_columns = [
     'DeviceType', 'DeviceInfo', 'ProductCD', 'card1', 'card2', 'card3', 'card4', 'card5', 'card6',
     'addr1', 'addr2', 'P_emaildomain', 'R_emaildomain',
@@ -76,7 +82,20 @@ def main():
     print("\n📊 Distribución de paquetes financieros asignados:")
     print(grupos_df["paquete_servicio"].value_counts())
 
+    # --- INICIO DE LA EDICIÓN CRÍTICA EN train.py ---
+    # Asegúrate de que 'preprocessors' sea el diccionario que devuelve encode_and_scale
+    # y que contiene todos los preprocesadores fit.
+
+    # Añadir la lista de features que el modelo espera al diccionario de preprocesadores
+    # Asumimos que 'isFraud' es la columna objetivo y no debe ser una feature de entrada al modelo
+    preprocessors['features_at_training'] = [col for col in df_encoded.columns if col != 'isFraud']
+
+    # Añadir el umbral óptimo al diccionario de preprocesadores
+    preprocessors['prediction_threshold'] = threshold
+    # --- FIN DE LA EDICIÓN CRÍTICA EN train.py ---
+
     # 9. Guardar modelo y preprocesadores
+    # Asegúrate de que save_preprocessors reciba el diccionario 'preprocessors' actualizado
     save_model(model, "gs://fraud-detection-lewagon/models/xgb_model.joblib")
     save_preprocessors(preprocessors, "gs://fraud-detection-lewagon/models/preprocessors.joblib")
 
