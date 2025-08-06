@@ -386,7 +386,7 @@ if st.session_state.df_scores is not None:
 
 
         # ---------- AGENTE CFO INTELIGENTE CON CHAT ----------
-        st.markdown("## 🤖 Agente AI")
+        st.markdown("## 🤖 Agente Virtual")
         
         if not openai_client_chat:
             st.error("No se pudo inicializar el cliente de OpenAI. Revisa tu API key.")
