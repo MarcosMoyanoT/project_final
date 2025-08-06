@@ -333,7 +333,15 @@ if st.session_state.df_scores is not None:
         fig_monto.update_layout(yaxis_title="Monto Total (USD)", xaxis_title="", showlegend=False, margin=dict(t=40))
         col2.plotly_chart(fig_monto, use_container_width=True)
 
-        paquete_costos = st.session_state.df_display.groupby("paquete_servicio")["estimated_cost_ponderado"].sum().reset_index()
+        # Filtrar para excluir 'sin paquete'
+        df_filtrado = st.session_state.df_display[
+            st.session_state.df_display["paquete_servicio"].str.strip().str.lower() != "sin paquete"
+        ]
+        
+        # Agrupar y calcular el costo estimado
+        paquete_costos = df_filtrado.groupby("paquete_servicio")["estimated_cost_ponderado"].sum().reset_index()
+        
+        # Renombrar columnas
         paquete_costos.rename(
             columns={
                 "estimated_cost_ponderado": "Costo Estimado Ponderado",
@@ -341,8 +349,11 @@ if st.session_state.df_scores is not None:
             },
             inplace=True
         )
+        
+        # Ordenar de mayor a menor
         paquete_costos = paquete_costos.sort_values(by="Costo Estimado Ponderado", ascending=False)
-
+        
+        # Crear gráfico de torta
         fig_paquete = px.pie(
             paquete_costos,
             names="Paquete de Servicio",
@@ -356,20 +367,23 @@ if st.session_state.df_scores is not None:
                 "Paquete Básico": "#99CCFF"
             }
         )
-
+        
+        # Ajustes de estilo del gráfico
         fig_paquete.update_traces(
             textinfo="percent+label",
             insidetextfont=dict(size=18, color="black")
         )
-
+        
         fig_paquete.update_layout(
             title_font=dict(size=24, family="Arial, sans-serif", color="black"),
             legend=dict(font=dict(size=14, color="black")),
             font=dict(family="Arial", size=14),
             margin=dict(t=50, b=10, l=10, r=10)
         )
-
+        
+        # Mostrar el gráfico
         st.plotly_chart(fig_paquete, use_container_width=True)
+
 
         # ---------- AGENTE CFO INTELIGENTE CON CHAT ----------
         st.markdown("## 🤖 Agente AI")
