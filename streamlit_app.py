@@ -310,7 +310,7 @@ if st.session_state.df_scores is not None:
             color="Riesgo de Grupo",
             color_discrete_map=color_map,
             text="Porcentaje",
-            title=" % de distribución de Transacciones por Grupo de Riesgo"
+            title=" Distribución en % de Transacciones por Grupo de Riesgo"
         )
         fig_pct.update_traces(texttemplate="%{text}%", textposition="outside")
         fig_pct.update_layout(yaxis_title="Porcentaje (%)", xaxis_title="", showlegend=False, margin=dict(t=40))
