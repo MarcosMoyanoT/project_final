@@ -272,13 +272,29 @@ if st.session_state.df_scores is not None:
 
         st.markdown("### 📌 Costos estimados por grupo de riesgo")
 
-        df_costos = st.session_state.df_display.groupby("risk_group")["estimated_cost_ponderado"].sum().reset_index()
+        # Filtrar el DataFrame para excluir el grupo 'fraude'
+        df_filtrado = st.session_state.df_display[
+            st.session_state.df_display["risk_group"].str.strip().str.lower() != "fraude"
+        ]
+        
+        # Agrupar y calcular los costos
+        df_costos = df_filtrado.groupby("risk_group")["estimated_cost_ponderado"].sum().reset_index()
+        
+        # Ordenar de mayor a menor según el costo
+        df_costos = df_costos.sort_values(by="estimated_cost_ponderado", ascending=False)
+        
+        # Renombrar columnas
         df_costos.rename(columns={
             "risk_group": "Riesgo de Grupo",
             "estimated_cost_ponderado": "Costo Estimado Ponderado"
         }, inplace=True)
+        
+        # Formatear la columna de costos
         df_costos["Costo Estimado Ponderado"] = df_costos["Costo Estimado Ponderado"].map("${:,.2f}".format)
+        
+        # Mostrar la tabla
         st.table(df_costos)
+        
 
         st.markdown("### 📈 Análisis adicional y métricas clave")
         col1, col2 = st.columns(2)
