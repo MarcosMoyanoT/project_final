@@ -368,21 +368,37 @@ if st.session_state.df_scores is not None:
                         if is_data_query:
                             # --- Lógica para preguntas de datos (sin PandasAI) ---
                             # Le pedimos a GPT que genere el código Python
+                            def resumir_df(df, n=3):
+                                return {
+                                        "columnas": list(df.columns),
+                                        "tipos": df.dtypes.astype(str).to_dict(),
+                                        "descripción": df.describe(include='all').fillna("").astype(str).to_dict(),
+                                        "muestra": df.head(n).fillna("").astype(str).to_dict(orient='records')
+                                        }
+                            resumen_df = resumir_df(st.session_state.df_scores)
                             prompt_for_code = f"""
-                            Eres un asistente experto en análisis de datos. Dada la siguiente pregunta del usuario y un DataFrame de pandas llamado `df` (que está en st.session_state.df_scores), genera el código Python para responder a la pregunta.
-                            Asegúrate de que el código sea completo y ejecutable. Si la pregunta es sobre "usuarios" o "transacciones", asume que se refiere a filas en el DataFrame.
-                            El DataFrame `df` tiene columnas como: {list(st.session_state.df_scores.columns)}.
-                            La columna 'risk_group' contiene categorías como 'Bajo riesgo', 'Riesgo medio', 'Riesgo alto', 'Fraude'.
-                            La columna 'TransactionAmt' contiene el monto de la transacción.
-                            La columna 'fraud_score' es el score de fraude.
+                            
+                            Eres un asistente experto en análisis de datos. A continuación se muestra un resumen del DataFrame llamado `df` que contiene los resultados de un modelo de detección de fraude:
 
-                            Pregunta del usuario: "{user_query}"
-
-                            Por favor, genera solo el código Python. No incluyas explicaciones ni texto adicional.
+                            Resumen del DataFrame:
+                            - Columnas: {resumen_df['columnas']}
+                            - Tipos: {resumen_df['tipos']}
+                            - Descripción (describe): {resumen_df['descripción']}
+                            - Muestra: {resumen_df['muestra']}
+                            
+                            Dada la siguiente pregunta del usuario, generá el código Python para responderla usando pandas.
+                            
+                            Pregunta: "{user_query}"
+                            
+                            IMPORTANTE:
+                            - El DataFrame se llama `df`.
+                            - No escribas explicaciones, solo el código completo en Python.
+                            
                             Ejemplo:
-                            # Código para "cuántas filas hay?"
+                            # Cuántas filas hay en el dataset
                             print(len(df))
                             """
+                        
                             try:
                                 code_completion = openai_client_chat.chat.completions.create(
                                     model="gpt-3.5-turbo",
