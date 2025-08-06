@@ -5,11 +5,11 @@ import io
 import json
 import os
 from dotenv import load_dotenv
-# from pandasai import SmartDataframe # Ya no usaremos PandasAI directamente
-from openai import OpenAI as openai_client # Importar el cliente general de OpenAI
-import plotly.express as px # Importar Plotly Express
+# Las siguientes líneas de pandasai deben estar COMENTADAS o ELIMINADAS
 # from pandasai import SmartDataframe
 # from pandasai.llm.openai import OpenAI
+from openai import OpenAI as openai_client # Importar el cliente general de OpenAI
+import plotly.express as px # Importar Plotly Express
 
 # Cargar variables de entorno al inicio
 load_dotenv()
@@ -17,8 +17,10 @@ load_dotenv()
 # Inicializar cliente de OpenAI para chat general
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if OPENAI_API_KEY:
+    st.info(f"Clave de API cargada (parcial): {OPENAI_API_KEY[:5]}...{OPENAI_API_KEY[-5:]}") # Línea de depuración
     openai_client_chat = openai_client(api_key=OPENAI_API_KEY)
 else:
+    st.error("La variable de entorno OPENAI_API_KEY no está configurada. Por favor, revisa tu archivo .env.")
     openai_client_chat = None
 
 # ---------- CONFIGURACIÓN DE PÁGINA Y API ----------
@@ -54,7 +56,11 @@ if uploaded_transaction_file and uploaded_identity_file:
             json_data = df_raw_input.to_json(orient='records')
             st.info("📡 Enviando datos a la API para predicción...")
             headers = {'Content-Type': 'application/json'}
+
+            # --- Añadir logs antes y después de la llamada a la API ---
+            print("DEBUG: Realizando llamada a la API de predicción...")
             response = requests.post(API_URL, data=json_data, headers=headers)
+            print(f"DEBUG: Llamada a la API finalizada. Código de estado: {response.status_code}")
 
             if response.status_code == 200:
                 predictions = response.json()
@@ -340,37 +346,97 @@ if st.session_state.df_scores is not None:
 
         # ---------- AGENTE CFO INTELIGENTE CON CHAT ----------
         st.markdown("## 🤖 Agente AI")
-        OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-        if OPENAI_API_KEY is None:
-            st.error("La variable de entorno OPENAI_API_KEY no está configurada.")
+        if not openai_client_chat:
+            st.error("No se pudo inicializar el cliente de OpenAI. Revisa tu API key.")
         else:
             for message in st.session_state.messages:
                 with st.chat_message(message["role"]):
                     st.markdown(message["content"])
 
-            if user_query := st.chat_input("Haz tu pregunta"):
+            if user_query := st.chat_input("Hacé tu pregunta financiera sobre los datos."):
                 st.session_state.messages.append({"role": "user", "content": user_query})
                 with st.chat_message("user"):
                     st.markdown(user_query)
 
                 with st.chat_message("assistant"):
                     with st.spinner("Pensando..."):
-                        llm_pandasai = OpenAI(api_token=OPENAI_API_KEY)
-                        smart_df = SmartDataframe(st.session_state.df_display, config={"llm": llm_pandasai})
+                        # Heurística para decidir si la pregunta es sobre los datos
+                        data_keywords = ["cuánto", "promedio", "suma", "total", "monto", "riesgo", "usuarios", "transacciones", "costo", "fraude", "número", "porcentaje", "distribución"]
+                        is_data_query = any(keyword in user_query.lower() for keyword in data_keywords)
 
-                        if user_query.lower() in ["hola", "hola como estas?", "saludos", "que tal?","buenas","quien eres?","como puedes ayudarme?"]:
-                            response = "¡Hola! Soy tu agente financiero. Hazme consultas sobre los datos cargados y/o outputs generados"
-                        try:
-                            response = smart_df.chat(user_query)
-                        except Exception as e:
-                            response = f"Lo siento, ocurrió un error al procesar tu pregunta. Error: {e}"
+                        if is_data_query:
+                            # --- Lógica para preguntas de datos (sin PandasAI) ---
+                            # Le pedimos a GPT que genere el código Python
+                            prompt_for_code = f"""
+                            Eres un asistente experto en análisis de datos. Dada la siguiente pregunta del usuario y un DataFrame de pandas llamado `df` (que está en st.session_state.df_scores), genera el código Python para responder a la pregunta.
+                            Asegúrate de que el código sea completo y ejecutable. Si la pregunta es sobre "usuarios" o "transacciones", asume que se refiere a filas en el DataFrame.
+                            El DataFrame `df` tiene columnas como: {list(st.session_state.df_scores.columns)}.
+                            La columna 'risk_group' contiene categorías como 'Bajo riesgo', 'Riesgo medio', 'Riesgo alto', 'Fraude'.
+                            La columna 'TransactionAmt' contiene el monto de la transacción.
+                            La columna 'fraud_score' es el score de fraude.
+
+                            Pregunta del usuario: "{user_query}"
+
+                            Por favor, genera solo el código Python. No incluyas explicaciones ni texto adicional.
+                            Ejemplo:
+                            # Código para "cuántas filas hay?"
+                            print(len(df))
+                            """
+                            try:
+                                code_completion = openai_client_chat.chat.completions.create(
+                                    model="gpt-3.5-turbo",
+                                    messages=[
+                                        {"role": "system", "content": prompt_for_code}
+                                    ]
+                                )
+                                python_code = code_completion.choices[0].message.content
+
+                                # Ejecutar el código generado
+                                # Creamos un entorno de ejecución seguro
+                                local_vars = {'df': st.session_state.df_scores, 'pd': pd}
+                                output_buffer = io.StringIO()
+                                try:
+                                    # Redirigir la salida estándar para capturar el print
+                                    import sys
+                                    old_stdout = sys.stdout
+                                    sys.stdout = output_buffer
+
+                                    with st.spinner("Ejecutando código..."):
+                                        exec(python_code, globals(), local_vars)
+                                        response = local_vars.get('result', output_buffer.getvalue().strip())
+                                        if not response: # Si el código no hizo print o no asignó 'result'
+                                            response = "No pude obtener una respuesta específica de los datos con ese código."
+                                            st.code(python_code) # Mostrar el código para depuración si no hay respuesta
+                                except Exception as exec_e:
+                                    response = f"Error al ejecutar el código Python generado: {exec_e}. Intenta reformular tu pregunta."
+                                    st.code(python_code) # Mostrar el código para depuración
+                                finally:
+                                    sys.stdout = old_stdout # Restaurar la salida estándar
+
+                            except Exception as e:
+                                response = f"Lo siento, ocurrió un error al generar el código Python para tu pregunta. Error: {e}"
+                        else:
+                            # Usar el cliente general de OpenAI para preguntas conversacionales
+                            messages_for_chat = [
+                                {"role": "system", "content": "You are a helpful CFO assistant for a fraud detection app. You respond in Spanish and your tone is professional. You can't access any data directly. If the user asks for data analysis, tell them you can only answer general questions and suggest they ask a specific data-related question."},
+                                {"role": "user", "content": user_query}
+                            ]
+
+                            try:
+                                chat_completion = openai_client_chat.chat.completions.create(
+                                    model="gpt-3.5-turbo",
+                                    messages=messages_for_chat
+                                )
+                                response = chat_completion.choices[0].message.content
+                            except Exception as e:
+                                response = f"Lo siento, no pude procesar tu pregunta con el modelo de chat. Error: {e}"
+
                         st.markdown(response)
                         st.session_state.messages.append({"role": "assistant", "content": response})
-                st.markdown(st.session_state.messages)
+
     else:
-        st.warning("La columna 'TransactionAmt' no se encontró en los datos cargados. Necesaria para el cálculo de costos.")
+        st.warning("La columna 'TransactionAmt' no se encontró en los datos cargados. Necesaria para el cálculo de costos y visualizaciones.")
 
 else:
     st.warning("Primero sube los archivos para activar el agente inteligente y las visualizaciones.")
-
