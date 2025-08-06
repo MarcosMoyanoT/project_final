@@ -358,7 +358,7 @@ if st.session_state.df_scores is not None:
             paquete_costos,
             names="Paquete de Servicio",
             values="Costo Estimado Ponderado",
-            title="📦 Costo Estimado por paquete de servicio",
+            title="📦 Costo estimado por paquete de servicio",
             hole=0.3,
             color="Paquete de Servicio",
             color_discrete_map={
