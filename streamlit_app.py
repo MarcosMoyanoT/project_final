@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 # from pandasai import SmartDataframe # Ya no usaremos PandasAI directamente
 from openai import OpenAI as openai_client # Importar el cliente general de OpenAI
 import plotly.express as px # Importar Plotly Express
+from pandasai import SmartDataframe
+from pandasai.llm.openai import OpenAI
 
 # Cargar variables de entorno al inicio
 load_dotenv()
@@ -126,8 +128,8 @@ if st.session_state.df_scores is not None:
         else: return "Fraude"
 
     if 'TransactionAmt' in st.session_state.df_scores.columns:
-        df_display = st.session_state.df_scores.copy()
-        df_display["risk_group"] = df_display["fraud_score"].apply(assign_risk_group)
+        st.session_state.df_display = st.session_state.df_scores.copy()
+        st.session_state.df_display["risk_group"] = st.session_state.df_display["fraud_score"].apply(assign_risk_group)
 
         def asignar_paquete_modelo(score):
             if score < low_risk_threshold: return "Paquete Completo"
@@ -135,7 +137,7 @@ if st.session_state.df_scores is not None:
             elif score < high_risk_threshold: return "Paquete Básico"
             else: return "Sin Paquete"
 
-        df_display["paquete_servicio"] = df_display["fraud_score"].apply(asignar_paquete_modelo)
+        st.session_state.df_display["paquete_servicio"] = st.session_state.df_display["fraud_score"].apply(asignar_paquete_modelo)
 
         paquete_a_costo = {
             "Paquete Básico": costo_simple,
@@ -144,7 +146,7 @@ if st.session_state.df_scores is not None:
             "Sin Paquete": 0.0
         }
 
-        df_display_baseline = df_display.copy()
+        df_display_baseline = st.session_state.df_display.copy()
         df_display_baseline["paquete_servicio"] = df_display_baseline["fraud_score"].apply(lambda s: "Paquete Completo" if s < 0.9 else "Sin Paquete")
 
         paquete_a_costo_baseline = {
@@ -152,25 +154,25 @@ if st.session_state.df_scores is not None:
             "Sin Paquete": 0.0
         }
 
-        df_display["estimated_cost_ponderado"] = df_display.apply(
+        st.session_state.df_display["estimated_cost_ponderado"] = st.session_state.df_display.apply(
             lambda row: row["TransactionAmt"] * row["fraud_score"] * paquete_a_costo.get(row["paquete_servicio"], 0.0), axis=1)
 
         df_display_baseline["estimated_cost_ponderado"] = df_display_baseline.apply(
             lambda row: row["TransactionAmt"] * row["fraud_score"] * paquete_a_costo_baseline.get(row["paquete_servicio"], 0.0), axis=1)
 
 
-        Costo_total_fraude_con_modelo = df_display['estimated_cost_ponderado'].sum()
+        Costo_total_fraude_con_modelo = st.session_state.df_display['estimated_cost_ponderado'].sum()
         Costo_total_fraude_sin_modelo = df_display_baseline['estimated_cost_ponderado'].sum()
         ahorro_total = Costo_total_fraude_sin_modelo - Costo_total_fraude_con_modelo
         porcentaje_ahorro = ahorro_total / Costo_total_fraude_sin_modelo if Costo_total_fraude_sin_modelo > 0 else 0
 
-        Monto_total_movimiento = df_display['TransactionAmt'].sum()
+        Monto_total_movimiento = st.session_state.df_display['TransactionAmt'].sum()
 
         # --- Gráficas y Métricas ---
         st.title("📊 Resultados de la Predicción y Análisis de Costos")
         st.subheader("🧪 Distribución de Riesgo por Modelo")
 
-        risk_counts = df_display["risk_group"].value_counts().reset_index()
+        risk_counts = st.session_state.df_display["risk_group"].value_counts().reset_index()
         risk_counts.columns = ["Riesgo de Grupo", "Cantidad"]
 
         color_map = {
@@ -219,7 +221,7 @@ if st.session_state.df_scores is not None:
             "TransactionID", "TransactionAmt", "fraud_score", "risk_group", "paquete_servicio", "estimated_cost_ponderado"
         ]
 
-        df_vista = df_display[cols_a_mostrar].head(20).copy()
+        df_vista = st.session_state.df_display[cols_a_mostrar].head(20).copy()
 
         df_vista.rename(columns={
             "TransactionID": "ID de Transacción",
@@ -252,7 +254,7 @@ if st.session_state.df_scores is not None:
 
         st.markdown("### 📌 Costos estimados por grupo de riesgo")
 
-        df_costos = df_display.groupby("risk_group")["estimated_cost_ponderado"].sum().reset_index()
+        df_costos = st.session_state.df_display.groupby("risk_group")["estimated_cost_ponderado"].sum().reset_index()
         df_costos.rename(columns={
             "risk_group": "Riesgo de Grupo",
             "estimated_cost_ponderado": "Costo Estimado Ponderado"
@@ -263,7 +265,7 @@ if st.session_state.df_scores is not None:
         st.markdown("### 📈 Análisis adicional y métricas clave")
         col1, col2 = st.columns(2)
 
-        risk_pct = df_display["risk_group"].value_counts(normalize=True).reset_index()
+        risk_pct = st.session_state.df_display["risk_group"].value_counts(normalize=True).reset_index()
         risk_pct.columns = ["Riesgo de Grupo", "Porcentaje"]
         risk_pct["Porcentaje"] = (risk_pct["Porcentaje"] * 100).round(2)
 
@@ -280,7 +282,7 @@ if st.session_state.df_scores is not None:
         fig_pct.update_layout(yaxis_title="Porcentaje (%)", xaxis_title="", showlegend=False, margin=dict(t=40))
         col1.plotly_chart(fig_pct, use_container_width=True)
 
-        monto_group = df_display.groupby("risk_group")["TransactionAmt"].sum().reset_index()
+        monto_group = st.session_state.df_display.groupby("risk_group")["TransactionAmt"].sum().reset_index()
         monto_group.rename(columns={"TransactionAmt": "Monto Total"}, inplace=True)
         monto_group = monto_group.sort_values(by="Monto Total", ascending=False)
 
@@ -297,7 +299,7 @@ if st.session_state.df_scores is not None:
         fig_monto.update_layout(yaxis_title="Monto Total (USD)", xaxis_title="", showlegend=False, margin=dict(t=40))
         col2.plotly_chart(fig_monto, use_container_width=True)
 
-        paquete_costos = df_display.groupby("paquete_servicio")["estimated_cost_ponderado"].sum().reset_index()
+        paquete_costos = st.session_state.df_display.groupby("paquete_servicio")["estimated_cost_ponderado"].sum().reset_index()
         paquete_costos.rename(
             columns={
                 "estimated_cost_ponderado": "Costo Estimado Ponderado",
@@ -336,92 +338,39 @@ if st.session_state.df_scores is not None:
 
         st.plotly_chart(fig_paquete, use_container_width=True)
 
-        # ---------- AGENTE CFO INTELIGENTE CON CHAT (CUSTOM) ----------
-        st.markdown("## 🤖 Consultá al Asistente (IA)")
+        # ---------- AGENTE CFO INTELIGENTE CON CHAT ----------
+        st.markdown("## 🤖 Agente AI")
+        OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-        if not openai_client_chat:
-            st.error("No se pudo inicializar el cliente de OpenAI. Revisa tu API key.")
+        if OPENAI_API_KEY is None:
+            st.error("La variable de entorno OPENAI_API_KEY no está configurada.")
         else:
             for message in st.session_state.messages:
                 with st.chat_message(message["role"]):
                     st.markdown(message["content"])
 
-            if user_query := st.chat_input("Hacé tu pregunta financiera sobre los datos."):
+            if user_query := st.chat_input("Haz tu pregunta"):
                 st.session_state.messages.append({"role": "user", "content": user_query})
                 with st.chat_message("user"):
                     st.markdown(user_query)
 
                 with st.chat_message("assistant"):
                     with st.spinner("Pensando..."):
-                        # Heurística para decidir si la pregunta es sobre los datos
-                        data_keywords = ["cuánto", "promedio", "suma", "total", "monto", "riesgo", "usuarios", "transacciones", "costo", "fraude", "número", "porcentaje", "distribución"]
-                        is_data_query = any(keyword in user_query.lower() for keyword in data_keywords)
+                        llm_pandasai = OpenAI(api_token=OPENAI_API_KEY)
+                        smart_df = SmartDataframe(st.session_state.df_display, config={"llm": llm_pandasai})
 
-                        if is_data_query:
-                            # --- Lógica para preguntas de datos (sin PandasAI) ---
-                            # Le pedimos a GPT que genere el código Python
-                            prompt_for_code = f"""
-                            Eres un asistente experto en análisis de datos. Dada la siguiente pregunta del usuario y un DataFrame de pandas llamado `df_display` (que está en st.session_state.df_display), genera el código Python para responder a la pregunta.
-                            Asegúrate de que el código sea completo y ejecutable. Si la pregunta es sobre "usuarios" o "transacciones", asume que se refiere a filas en el DataFrame.
-                            El DataFrame `df_display` tiene columnas como: {list(st.session_state.df_display.columns)}.
-                            La columna 'risk_group' contiene categorías como 'Bajo riesgo', 'Riesgo medio', 'Riesgo alto', 'Fraude'.
-                            La columna 'TransactionAmt' contiene el monto de la transacción.
-                            La columna 'fraud_score' es el score de fraude.
-
-                            Pregunta del usuario: "{user_query}"
-
-                            Por favor, genera solo el código Python. No incluyas explicaciones ni texto adicional.
-                            Ejemplo:
-                            # Código para "cuántas filas hay?"
-                            print(len(df))
-                            """
-                            try:
-                                code_completion = openai_client_chat.chat.completions.create(
-                                    model="gpt-3.5-turbo",
-                                    messages=[
-                                        {"role": "system", "content": prompt_for_code}
-                                    ]
-                                )
-                                python_code = code_completion.choices[0].message.content
-
-                                # Ejecutar el código generado
-                                # Creamos un entorno de ejecución seguro
-                                local_vars = {'df': st.session_state.df_display, 'pd': pd}
-                                output_buffer = io.StringIO()
-                                try:
-                                    # Redirigir la salida estándar para capturar el print
-                                    with st.spinner("Ejecutando código..."):
-                                        exec(python_code, globals(), local_vars)
-                                        response = local_vars.get('result', output_buffer.getvalue().strip())
-                                        if not response: # Si el código no hizo print o no asignó 'result'
-                                            response = "No pude obtener una respuesta específica de los datos con ese código."
-                                except Exception as exec_e:
-                                    response = f"Error al ejecutar el código Python generado: {exec_e}. Intenta reformular tu pregunta."
-                                    st.code(python_code) # Mostrar el código para depuración
-
-                            except Exception as e:
-                                response = f"Lo siento, ocurrió un error al generar el código Python para tu pregunta. Error: {e}"
-                        else:
-                            # Usar el cliente general de OpenAI para preguntas conversacionales
-                            messages_for_chat = [
-                                {"role": "system", "content": "You are a helpful CFO assistant for a fraud detection app. You respond in Spanish and your tone is professional. You can't access any data directly. If the user asks for data analysis, tell them you can only answer general questions and suggest they ask a specific data-related question."},
-                                {"role": "user", "content": user_query}
-                            ]
-
-                            try:
-                                chat_completion = openai_client_chat.chat.completions.create(
-                                    model="gpt-3.5-turbo",
-                                    messages=messages_for_chat
-                                )
-                                response = chat_completion.choices[0].message.content
-                            except Exception as e:
-                                response = f"Lo siento, no pude procesar tu pregunta con el modelo de chat. Error: {e}"
-
+                        if user_query.lower() in ["hola", "hola como estas?", "saludos", "que tal?","buenas","quien eres?","como puedes ayudarme?"]:
+                            response = "¡Hola! Soy tu agente financiero. Hazme consultas sobre los datos cargados y/o outputs generados"
+                        try:
+                            response = smart_df.chat(user_query)
+                        except Exception as e:
+                            response = f"Lo siento, ocurrió un error al procesar tu pregunta. Error: {e}"
                         st.markdown(response)
                         st.session_state.messages.append({"role": "assistant", "content": response})
-
+                st.markdown(st.session_state.messages)
     else:
-        st.warning("La columna 'TransactionAmt' no se encontró en los datos cargados. Necesaria para el cálculo de costos y visualizaciones.")
+        st.warning("La columna 'TransactionAmt' no se encontró en los datos cargados. Necesaria para el cálculo de costos.")
 
 else:
     st.warning("Primero sube los archivos para activar el agente inteligente y las visualizaciones.")
+
