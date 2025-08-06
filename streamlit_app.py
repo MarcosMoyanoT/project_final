@@ -107,10 +107,10 @@ if st.session_state.df_scores is not None:
         "tarjeta": 285000
     }
 
-    st.sidebar.header("💰 Tasa de costo por unidad de negocio:")
-    cost_prestamo = st.sidebar.number_input("🏦 Tasa - Préstamos", 0.0, 1.0, value=0.02052, step=0.0001, format="%.5f")
-    cost_transaccion = st.sidebar.number_input("💳 Tasa - Transacciones", 0.0, 1.0, value=0.01004, step=0.0001, format="%.5f")
-    cost_tarjeta = st.sidebar.number_input("🧾 Tasa - Tarjeta de Crédito", 0.0, 1.0, value=0.00173, step=0.0001, format="%.5f")
+    st.sidebar.header("💰 Tasa histórica de fraude por unidad de negocio:")
+    cost_prestamo = st.sidebar.number_input("🏦 Tasa - Préstamos", 0.0, 1.0, value=0.02052, step=0.0001, format="%.3f")
+    cost_transaccion = st.sidebar.number_input("💳 Tasa - Transacciones", 0.0, 1.0, value=0.01004, step=0.0001, format="%.3f")
+    cost_tarjeta = st.sidebar.number_input("🧾 Tasa - Tarjeta de Crédito", 0.0, 1.0, value=0.00173, step=0.0001, format="%.3f")
 
     def costo_paquete(unidades):
         costo_total = 0.0
@@ -129,9 +129,15 @@ if st.session_state.df_scores is not None:
     costo_completo = costo_paquete(["tarjeta", "transaccion", "prestamo"])
 
     st.sidebar.header("📦 Costos promedio por paquete")
-    st.sidebar.markdown(f"**Paquete Simple** 💳: `{costo_simple:.5f}`")
-    st.sidebar.markdown(f"**Paquete Medio** 💳➕📤: `{costo_medio:.5f}`")
-    st.sidebar.markdown(f"**Paquete Completo** 💳➕📤➕🏦: `{costo_completo:.5f}`")
+    st.sidebar.markdown(
+    """      
+    Según el nivel de riesgo estimado, cada usuario recibe un paquete de servicios financieros adaptado a su perfil.
+    
+    """
+    )
+    st.sidebar.markdown(f"**Paquete Simple** 💳) 
+    st.sidebar.markdown(f"**Paquete Medio** 💳➕🧾)
+    st.sidebar.markdown(f"**Paquete Completo** 💳➕🧾➕🏦) 
 
     def assign_risk_group(score):
         if score < low_risk_threshold: return "Bajo riesgo"
