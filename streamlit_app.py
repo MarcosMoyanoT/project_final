@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 # from pandasai import SmartDataframe # Ya no usaremos PandasAI directamente
 from openai import OpenAI as openai_client # Importar el cliente general de OpenAI
 import plotly.express as px # Importar Plotly Express
-from pandasai import SmartDataframe
+# from pandasai import SmartDataframe
 from pandasai.llm.openai import OpenAI
 
 # Cargar variables de entorno al inicio
