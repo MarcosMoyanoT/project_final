@@ -370,10 +370,10 @@ if st.session_state.df_scores is not None:
                             # --- Lógica para preguntas de datos (sin PandasAI) ---
                             # Le pedimos a GPT que genere el código Python
                             prompt_for_code = f"""
-                            Eres un asistente experto en análisis de datos. Dada la siguiente pregunta del usuario y un DataFrame de pandas llamado `df` (que está en st.session_state.df_scores), genera el código Python para responder a la pregunta.
+                            Eres un asistente experto en análisis de datos. Dada la siguiente pregunta del usuario y un DataFrame de pandas llamado `st.session_state.df_display` (que está en st.session_state.df_scores), genera el código Python para responder a la pregunta.
                             Asegúrate de que el código sea completo y ejecutable. Si la pregunta es sobre "usuarios" o "transacciones", asume que se refiere a filas en el DataFrame.
 
-                            El DataFrame `df` tiene las siguientes columnas clave:
+                            El DataFrame `st.session_state.df_display` tiene las siguientes columnas clave:
                             - 'risk_group': Contiene las categorías 'Bajo riesgo', 'Riesgo medio', 'Riesgo alto', 'Fraude'.
                             - 'TransactionAmt': Contiene el monto de la transacción.
                             - 'fraud_score': Es el score de fraude del modelo.
