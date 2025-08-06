@@ -237,7 +237,7 @@ if st.session_state.df_scores is not None:
         st.markdown("### 🧾 Vista previa de asignaciones y costos")
 
         cols_a_mostrar = [
-            "TransactionID", "TransactionAmt", "fraud_score", "risk_group", "paquete_servicio", "estimated_cost_ponderado"
+            "TransactionID", "TransactionAmt", "fraud_score", "risk_group", "paquete_servicio"
         ]
 
         df_vista = st.session_state.df_display[cols_a_mostrar].head(20).copy()
