@@ -36,7 +36,8 @@ if 'messages' not in st.session_state:
 API_URL = "https://fraud-detector-api-567985136734.us-central1.run.app"
 
 # ---------- CARGA DE DATOS Y LÓGICA DE PREDICCIÓN ----------
-st.title("🔍 Sistema Inteligente de Detección de Fraude")
+st.title("FRAUD RISK APP")
+st.markdown("🔍 Sistema Inteligente de Detección de Fraude")
 st.markdown("Subí tus archivos `transaction.csv` y `identity.csv` para detectar fraudes automáticamente ⚠️")
 
 uploaded_transaction_file = st.file_uploader("📂 Elige el archivo de Transacciones (transaction.csv)", type="csv")
