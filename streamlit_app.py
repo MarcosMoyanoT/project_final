@@ -46,7 +46,7 @@ if uploaded_transaction_file and uploaded_identity_file:
     if st.session_state.df_scores is None or \
        (uploaded_transaction_file.name, uploaded_identity_file.name) != \
        (st.session_state.get('last_trans_file_name'), st.session_state.get('last_id_file_name')):
-
+        
         try:
             df_transactions = pd.read_csv(uploaded_transaction_file)
             df_identity = pd.read_csv(uploaded_identity_file)
@@ -56,7 +56,7 @@ if uploaded_transaction_file and uploaded_identity_file:
             json_data = df_raw_input.to_json(orient='records')
             st.info("📡 Enviando datos a la API para predicción...")
             headers = {'Content-Type': 'application/json'}
-
+            
             # --- Añadir logs antes y después de la llamada a la API ---
             print("DEBUG: Realizando llamada a la API de predicción...")
             response = requests.post(API_URL, data=json_data, headers=headers)
@@ -66,18 +66,18 @@ if uploaded_transaction_file and uploaded_identity_file:
                 predictions = response.json()
                 st.success("🎯 Predicciones recibidas de la API.")
                 df_predictions = pd.DataFrame(predictions)
-
+                
                 st.session_state.df_scores = df_raw_input.copy()
                 st.session_state.df_scores['fraud_score'] = df_predictions['prediction']
 
                 st.session_state.last_trans_file_name = uploaded_transaction_file.name
                 st.session_state.last_id_file_name = uploaded_identity_file.name
-
+                
             else:
                 st.error(f"❌ Error al conectar con la API. Código de estado: {response.status_code}")
                 st.json(response.json())
                 st.session_state.df_scores = None
-
+                
         except Exception as e:
             st.error(f"⚠️ Ocurrió un error: {e}")
             st.session_state.df_scores = None
@@ -346,7 +346,7 @@ if st.session_state.df_scores is not None:
 
         # ---------- AGENTE CFO INTELIGENTE CON CHAT ----------
         st.markdown("## 🤖 Agente AI")
-
+        
         if not openai_client_chat:
             st.error("No se pudo inicializar el cliente de OpenAI. Revisa tu API key.")
         else:
@@ -361,44 +361,32 @@ if st.session_state.df_scores is not None:
 
                 with st.chat_message("assistant"):
                     with st.spinner("Pensando..."):
+                        # --- CÓDIGO CORREGIDO Y MEJORADO ---
                         # Heurística para decidir si la pregunta es sobre los datos
-                        data_keywords = ["cuánto", "promedio", "suma", "total", "monto", "riesgo", "usuarios", "transacciones", "costo", "fraude", "número", "porcentaje", "distribución"]
+                        data_keywords = ["cuánto", "promedio", "suma", "total", "monto", "riesgo", "usuarios", "transacciones", "costo", "fraude", "número", "porcentaje", "distribución", "fraudulentos"]
                         is_data_query = any(keyword in user_query.lower() for keyword in data_keywords)
 
                         if is_data_query:
                             # --- Lógica para preguntas de datos (sin PandasAI) ---
                             # Le pedimos a GPT que genere el código Python
-                            def resumir_df(df, n=3):
-                                return {
-                                        "columnas": list(df.columns),
-                                        "tipos": df.dtypes.astype(str).to_dict(),
-                                        "descripción": df.describe(include='all').fillna("").astype(str).to_dict(),
-                                        "muestra": df.head(n).fillna("").astype(str).to_dict(orient='records')
-                                        }
-                            resumen_df = resumir_df(st.session_state.df_scores)
                             prompt_for_code = f"""
-                            
-                            Eres un asistente experto en análisis de datos. A continuación se muestra un resumen del DataFrame llamado `df` que contiene los resultados de un modelo de detección de fraude:
+                            Eres un asistente experto en análisis de datos. Dada la siguiente pregunta del usuario y un DataFrame de pandas llamado `df` (que está en st.session_state.df_scores), genera el código Python para responder a la pregunta.
+                            Asegúrate de que el código sea completo y ejecutable. Si la pregunta es sobre "usuarios" o "transacciones", asume que se refiere a filas en el DataFrame.
 
-                            Resumen del DataFrame:
-                            - Columnas: {resumen_df['columnas']}
-                            - Tipos: {resumen_df['tipos']}
-                            - Descripción (describe): {resumen_df['descripción']}
-                            - Muestra: {resumen_df['muestra']}
-                            
-                            Dada la siguiente pregunta del usuario, generá el código Python para responderla usando pandas.
-                            
-                            Pregunta: "{user_query}"
-                            
-                            IMPORTANTE:
-                            - El DataFrame se llama `df`.
-                            - No escribas explicaciones, solo el código completo en Python.
-                            
+                            El DataFrame `df` tiene las siguientes columnas clave:
+                            - 'risk_group': Contiene las categorías 'Bajo riesgo', 'Riesgo medio', 'Riesgo alto', 'Fraude'.
+                            - 'TransactionAmt': Contiene el monto de la transacción.
+                            - 'fraud_score': Es el score de fraude del modelo.
+                            - 'estimated_cost_ponderado': Es el costo estimado por transacción.
+
+                            Pregunta del usuario: "{user_query}"
+
+                            Si la pregunta se refiere a "fraude", "fraudulentos" o "transacciones fraudulentas", debes filtrar la columna `risk_group` para que sea igual a 'Fraude'.
+                            Por favor, genera solo el código Python. No incluyas explicaciones ni texto adicional.
                             Ejemplo:
-                            # Cuántas filas hay en el dataset
+                            # Código para "cuántas filas hay?"
                             print(len(df))
                             """
-                        
                             try:
                                 code_completion = openai_client_chat.chat.completions.create(
                                     model="gpt-3.5-turbo",
@@ -407,7 +395,7 @@ if st.session_state.df_scores is not None:
                                     ]
                                 )
                                 python_code = code_completion.choices[0].message.content
-
+                                
                                 # Ejecutar el código generado
                                 # Creamos un entorno de ejecución seguro
                                 local_vars = {'df': st.session_state.df_scores, 'pd': pd}
@@ -417,7 +405,7 @@ if st.session_state.df_scores is not None:
                                     import sys
                                     old_stdout = sys.stdout
                                     sys.stdout = output_buffer
-
+                                    
                                     with st.spinner("Ejecutando código..."):
                                         exec(python_code, globals(), local_vars)
                                         response = local_vars.get('result', output_buffer.getvalue().strip())
@@ -429,7 +417,7 @@ if st.session_state.df_scores is not None:
                                     st.code(python_code) # Mostrar el código para depuración
                                 finally:
                                     sys.stdout = old_stdout # Restaurar la salida estándar
-
+                                    
                             except Exception as e:
                                 response = f"Lo siento, ocurrió un error al generar el código Python para tu pregunta. Error: {e}"
                         else:
@@ -438,7 +426,7 @@ if st.session_state.df_scores is not None:
                                 {"role": "system", "content": "You are a helpful CFO assistant for a fraud detection app. You respond in Spanish and your tone is professional. You can't access any data directly. If the user asks for data analysis, tell them you can only answer general questions and suggest they ask a specific data-related question."},
                                 {"role": "user", "content": user_query}
                             ]
-
+                            
                             try:
                                 chat_completion = openai_client_chat.chat.completions.create(
                                     model="gpt-3.5-turbo",
@@ -447,7 +435,7 @@ if st.session_state.df_scores is not None:
                                 response = chat_completion.choices[0].message.content
                             except Exception as e:
                                 response = f"Lo siento, no pude procesar tu pregunta con el modelo de chat. Error: {e}"
-
+                        
                         st.markdown(response)
                         st.session_state.messages.append({"role": "assistant", "content": response})
 
