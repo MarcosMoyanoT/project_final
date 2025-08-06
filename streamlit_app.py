@@ -293,7 +293,7 @@ if st.session_state.df_scores is not None:
         df_costos["Costo Estimado Ponderado"] = df_costos["Costo Estimado Ponderado"].map("${:,.2f}".format)
         
         # Mostrar la tabla
-        st.table(df_costos)
+        st.table(df_costos.reset_index(drop=True))
         
 
         st.markdown("### 📈 Análisis adicional y métricas clave")
