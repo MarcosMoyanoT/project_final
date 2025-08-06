@@ -135,9 +135,9 @@ if st.session_state.df_scores is not None:
     
     """
     )
-    st.sidebar.markdown(f"**Paquete Simple** 💳) 
-    st.sidebar.markdown(f"**Paquete Medio** 💳➕🧾)
-    st.sidebar.markdown(f"**Paquete Completo** 💳➕🧾➕🏦) 
+    st.sidebar.markdown(f"**Paquete Simple** 💳") 
+    st.sidebar.markdown(f"**Paquete Medio** 💳➕🧾")
+    st.sidebar.markdown(f"**Paquete Completo** 💳➕🧾➕🏦") 
 
     def assign_risk_group(score):
         if score < low_risk_threshold: return "Bajo riesgo"
