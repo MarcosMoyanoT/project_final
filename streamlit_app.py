@@ -17,14 +17,14 @@ load_dotenv()
 # Inicializar cliente de OpenAI para chat general
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if OPENAI_API_KEY:
-    st.info(f"Clave de API cargada (parcial): {OPENAI_API_KEY[:5]}...{OPENAI_API_KEY[-5:]}") # Línea de depuración
+    # st.info(f"Clave de API cargada (parcial): {OPENAI_API_KEY[:5]}...{OPENAI_API_KEY[-5:]}") # Línea de depuración
     openai_client_chat = openai_client(api_key=OPENAI_API_KEY)
 else:
     st.error("La variable de entorno OPENAI_API_KEY no está configurada. Por favor, revisa tu archivo .env.")
     openai_client_chat = None
 
 # ---------- CONFIGURACIÓN DE PÁGINA Y API ----------
-st.set_page_config(page_title="🚨 Simulador de Fraude + Agente IA 🤖", layout="wide")
+st.set_page_config(page_title="🚨 Detección de Fraude + Agente IA 🤖", layout="wide")
 
 # Inicializar st.session_state para df_scores y messages
 if 'df_scores' not in st.session_state:
@@ -37,10 +37,10 @@ API_URL = "https://fraud-detector-api-567985136734.us-central1.run.app"
 
 # ---------- CARGA DE DATOS Y LÓGICA DE PREDICCIÓN ----------
 st.title("🔍 Sistema Inteligente de Detección de Fraude")
-st.markdown("Subí tus archivos `train_transaction.csv` y `train_identity.csv` para detectar fraudes automáticamente ⚠️")
+st.markdown("Subí tus archivos `transaction.csv` y `identity.csv` para detectar fraudes automáticamente ⚠️")
 
-uploaded_transaction_file = st.file_uploader("📂 Elige el archivo de Transacciones (train_transaction.csv)", type="csv")
-uploaded_identity_file = st.file_uploader("📂 Elige el archivo de Identidad (train_identity.csv)", type="csv")
+uploaded_transaction_file = st.file_uploader("📂 Elige el archivo de Transacciones (transaction.csv)", type="csv")
+uploaded_identity_file = st.file_uploader("📂 Elige el archivo de Identidad (identity.csv)", type="csv")
 
 if uploaded_transaction_file and uploaded_identity_file:
     if st.session_state.df_scores is None or \
