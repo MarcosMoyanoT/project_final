@@ -229,8 +229,8 @@ if st.session_state.df_scores is not None:
 
         st.subheader("📈 Métricas del modelo")
         col1, col2, col3, col4 = st.columns(4)
-        col1.metric("💸 Costo con modelo (USD)", f"${Costo_total_fraude_con_modelo:,.2f}")
-        col2.metric("💰 Costo sin modelo (USD)", f"${Costo_total_fraude_sin_modelo:,.2f}")
+        col1.metric("💸 Costo con Fraud Risk App (USD)", f"${Costo_total_fraude_con_modelo:,.2f}")
+        col2.metric("💰 Costo sin Fraud Risk App (USD)", f"${Costo_total_fraude_sin_modelo:,.2f}")
         col3.metric("🤑 Ahorro estimado (USD)", f"${ahorro_total:,.2f}")
         col4.metric("📉 Porcentaje de ahorro", f"{porcentaje_ahorro:.2%}")
 
@@ -247,13 +247,12 @@ if st.session_state.df_scores is not None:
             "TransactionAmt": "Monto de Transacción",
             "fraud_score": "Puntaje de Fraude",
             "risk_group": "Riesgo de Grupo",
-            "paquete_servicio": "Paquete de Servicio",
-            "estimated_cost_ponderado": "Costo Estimado Ponderado"
-        }, inplace=True)
+            "paquete_servicio": "Paquete de Servicio"
+                }, inplace=True)
 
         df_vista["Puntaje de Fraude"] = (df_vista["Puntaje de Fraude"] * 100).map("{:.2f}%".format)
         df_vista["Monto de Transacción"] = df_vista["Monto de Transacción"].map("${:,.2f}".format)
-        df_vista["Costo Estimado Ponderado"] = df_vista["Costo Estimado Ponderado"].map("${:,.2f}".format)
+        
 
         def color_riesgo(val):
             colores = {
